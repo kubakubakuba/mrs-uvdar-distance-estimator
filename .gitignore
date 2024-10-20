@@ -1,0 +1,7 @@
+uvled_freq_dataset/
+filtered/
+.venv/
+*.raw
+*.bias
+
+__pycache__/
