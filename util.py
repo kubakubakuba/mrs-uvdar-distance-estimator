@@ -1,14 +1,30 @@
 from metavision_core.event_io import RawReader, EventsIterator
+from metavision_sdk_analytics import DominantFrequencyEventsAlgorithm
 from metavision_sdk_core import RoiFilterAlgorithm
 from metavision_ml.preprocessing import histo, viz_histo
 
 from skimage.measure import label, regionprops
 from skimage.filters import threshold_otsu
 from scipy.ndimage import binary_opening, gaussian_filter
+from scipy.signal import find_peaks
 
 import numpy as np
 
 event_dtype = np.dtype([('t', '<u4'), ('x', '<u2'), ('y', '<u2'), ('p', 'u1')])
+
+def cut_timelt_events(events, time):
+	"""
+		Cut out events that are under some time window.
+
+		Args:
+			events: An array of event from an event camera in format (x, y, p, t).
+			time (int): A time below which all event will be removed.
+
+		Returns:
+			Filtered events that fall in this condition.
+	"""
+
+	return events[events['t'] > time]
 
 def filter_events(events, areas):
 	"""
@@ -80,7 +96,7 @@ def filter_raws(raws_boxes):
 
 	return filtered
 
-def move_events(events):
+def move_events(events, offset=(0, 0)):
 	"""
 		Moves events to locations near (0, 0)
 
@@ -91,13 +107,15 @@ def move_events(events):
 			events: An array of moved events (x, y, p, t)
 	"""
 
+	xo, yo = offset
+
 	events = np.array(events)
 
 	min_x = np.min(events['x'])
 	min_y = np.min(events['y'])
 
-	events['x'] -= min_x
-	events['y'] -= min_y
+	events['x'] -= min_x - xo
+	events['y'] -= min_y - yo
 
 	return events
 
@@ -173,3 +191,53 @@ def find_bounding_boxes(raw: RawReader, delta_t = 500, start_ts = 0.5 * 1e6, bou
 			bounding_boxes.append((minc_adj, minr_adj, maxc_adj, maxr_adj))
 	
 	return (bounding_boxes, event_count_map_smoothed)
+
+def bin_events_over_time(events, total_duration=1e6, small_delta_t=100):
+	time_bins = np.arange(0, total_duration + small_delta_t, small_delta_t)
+	time_bins_ms = time_bins[:-1] / 1000  #convert to milliseconds
+
+	counts, _ = np.histogram(events['t'], bins=time_bins)
+
+	return counts, time_bins_ms
+
+
+def detect_peaks_in_event_counts(counts, time_bins_ms):
+	peaks, _ = find_peaks(counts, height=np.mean(counts))
+	peak_times = time_bins_ms[peaks]
+
+	if len(peak_times) > 1:
+		periods = np.diff(peak_times)
+		#estimated_frequency = 1000 / np.mean(periods)
+	#else:
+		#estimated_frequency = np.nan
+
+	return peaks, peak_times
+
+# def perform_fft_analysis(counts, small_delta_t=100):
+# 	fft_result = np.fft.fft(counts)
+# 	freqs = np.fft.fftfreq(len(counts), d=small_delta_t / 1e6)  #convert delta_t to seconds
+
+# 	idxs = np.where(freqs > 0)
+# 	freqs = freqs[idxs]
+# 	power = np.abs(fft_result[idxs])
+
+# 	dominant_freq = freqs[np.argmax(power)]
+
+# 	return freqs, power, dominant_freq
+
+def estimate_frequency(events, min_freq = 1000, max_freq = 30000, freq_precision=10, min_count = 0):
+	events = np.squeeze(events)
+	
+	dominant_freq_algo = DominantFrequencyEventsAlgorithm(frequency_precision = freq_precision, min_frequency = min_freq, max_frequency = max_freq, min_count = min_count)
+	freq = dominant_freq_algo.compute_dominant_value(events)
+
+	return freq[1]
+
+def estimate_frequency_from_raw(raw, num_events=150000, min_freq = 1000, max_freq = 30000, freq_precision=10, min_count = 0):
+	raw.reset()
+	evs = raw.load_n_events(num_events)
+	
+	dominant_freq_algo = DominantFrequencyEventsAlgorithm(frequency_precision = freq_precision, min_frequency = min_freq, max_frequency = max_freq, min_count = min_count)
+	freq = dominant_freq_algo.compute_dominant_value(evs)
+
+	return freq[1]
