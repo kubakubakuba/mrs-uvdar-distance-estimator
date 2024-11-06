@@ -54,6 +54,20 @@ def filter_events(events, areas):
 	
 	return filtered_events
 
+def polarize_events(events, polarity = -1):
+	"""
+	Polarizes events.
+	
+	Args:
+		events: An array of events from an event camera.
+		polarity: The polarity to filter events with. Can be either 0 or 1. If set to -1 or ony other value it returns all the events.
+	
+	Returns:
+		Filtered events that have the specified polarity.
+	"""
+
+	return events[events['p'] != polarity]
+
 def filter_events_singlebox(events, area):
 	"""
 	Filters events in one area.
@@ -86,13 +100,26 @@ def filter_raws(raws_boxes):
 	"""
 
 	filtered = []
+	#print(raws_boxes[0][1])
 	for (raw, boxes) in raws_boxes:
 		raw.reset()  # Ensure we're at the beginning of the recording
-
 		events = raw.load_n_events(-1)  # load all events
 		events = filter_events(events, boxes)
 
 		filtered.append(events)
+
+	return filtered
+
+def filter_raw(raws_boxes):
+	filtered = []
+
+	raw, boxes = raws_boxes
+
+	raw.reset()
+	events = raw.load_n_events(-1)
+	events = filter_events(events, boxes)
+
+	filtered.append(events)
 
 	return filtered
 
@@ -119,7 +146,7 @@ def move_events(events, offset=(0, 0)):
 
 	return events
 
-def find_bounding_boxes(raw: RawReader, delta_t = 500, start_ts = 0.5 * 1e6, bounding_box_size=20):
+def find_bounding_boxes(raw: RawReader, delta_t = 10000, start_ts = 0.1 * 1e6, bounding_box_size=20):
 	"""
 	Processes a raw event recording and locates areas of interest (such as LEDs) in the event stream by identifying bounding boxes.
 	
@@ -138,7 +165,6 @@ def find_bounding_boxes(raw: RawReader, delta_t = 500, start_ts = 0.5 * 1e6, bou
 				- max_col (int): Bottom-right column coordinate of the bounding box.
 			- ndarray: A smoothed event count map for visualization purposes.
 	"""
-
 
 	height, width = raw.get_size()
 
@@ -190,7 +216,9 @@ def find_bounding_boxes(raw: RawReader, delta_t = 500, start_ts = 0.5 * 1e6, bou
 
 			bounding_boxes.append((minc_adj, minr_adj, maxc_adj, maxr_adj))
 	
+	raw.reset()
 	return (bounding_boxes, event_count_map_smoothed)
+	
 
 def bin_events_over_time(events, total_duration=1e6, small_delta_t=100):
 	time_bins = np.arange(0, total_duration + small_delta_t, small_delta_t)
@@ -199,7 +227,6 @@ def bin_events_over_time(events, total_duration=1e6, small_delta_t=100):
 	counts, _ = np.histogram(events['t'], bins=time_bins)
 
 	return counts, time_bins_ms
-
 
 def detect_peaks_in_event_counts(counts, time_bins_ms):
 	peaks, _ = find_peaks(counts, height=np.mean(counts))
@@ -241,3 +268,55 @@ def estimate_frequency_from_raw(raw, num_events=150000, min_freq = 1000, max_fre
 	freq = dominant_freq_algo.compute_dominant_value(evs)
 
 	return freq[1]
+
+def resample_by_polarity(events):
+	'''
+		Resamples the signal by sum of event polarities.
+
+		This gives a periodically sampled 1D signal, that can be used for frequency estimation.
+	'''
+
+	#raw.reset()
+
+	#events = raw.load_n_events(-1)
+
+	# Create a 1D signal by summing the polarities of events
+
+	# Get the maximum timestamp
+
+	max_t = np.max(events['t'])
+
+	# Create a 1D signal with the same length as the recording
+
+	signal = np.zeros(max_t + 1)
+
+	# Sum the polarities of events at each timestamp
+
+	for event in events:
+		signal[event['t']] += event['p']
+
+	return signal
+
+def raws_load_events(raws, dtime = 5000, start_ts = 0.25 * 1e6):
+	'''
+		Loads events from multiple raw files.
+
+		Args:
+			raws: A list of RawReader objects.
+			dtime: The time interval (in microseconds) over which to accumulate events for each frame. Default is 500 microseconds.
+			start_ts: The starting timestamp (in microseconds) from which to begin processing the event stream. Default is 0.25 seconds.
+
+		Returns:
+			A list of event arrays, each containing events from a single raw file.
+	'''
+	
+	events = []
+
+	for raw in raws:
+		raw.reset()
+		raw.seek_time(int(start_ts))
+		evs = raw.load_delta_t(dtime)
+		evs['t'] -= int(start_ts)
+		events.append(evs)
+
+	return events
