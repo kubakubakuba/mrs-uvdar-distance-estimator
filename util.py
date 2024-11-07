@@ -297,6 +297,26 @@ def resample_by_polarity(events):
 
 	return signal
 
+def raw_load_events(raw, dtime = 5000, start_ts = 0.25 * 1e6):
+	'''
+		Loads events from a single raw file.
+
+		Args:
+			raw: A RawReader object.
+			dtime: The time interval (in microseconds) over which to accumulate events for each frame. Default is 500 microseconds.
+			start_ts: The starting timestamp (in microseconds) from which to begin processing the event stream. Default is 0.25 seconds.
+
+		Returns:
+			An array of events from the raw file.
+	'''
+
+	raw.reset()
+	raw.seek_time(int(start_ts))
+	evs = raw.load_delta_t(dtime)
+	evs['t'] -= int(start_ts)
+
+	return evs
+
 def raws_load_events(raws, dtime = 5000, start_ts = 0.25 * 1e6):
 	'''
 		Loads events from multiple raw files.
@@ -313,10 +333,18 @@ def raws_load_events(raws, dtime = 5000, start_ts = 0.25 * 1e6):
 	events = []
 
 	for raw in raws:
-		raw.reset()
-		raw.seek_time(int(start_ts))
-		evs = raw.load_delta_t(dtime)
-		evs['t'] -= int(start_ts)
-		events.append(evs)
+		events.append(raw_load_events(raw, dtime, start_ts))
 
 	return events
+
+def align_signal(signal, period):
+	peaks, _ = find_peaks(signal, distance = max(int(period // 2), 1))
+
+	if peaks.size > 0:
+		#align to the first detected peak
+		start_index = peaks[0]
+		return signal[start_index:]
+	
+	else:
+		#if no peaks are found, return the signal as is
+		return signal

@@ -1,8 +1,14 @@
 from metavision_ml.preprocessing import viz_histo
 from metavision_ml.preprocessing.event_to_tensor import histo
 from matplotlib import pyplot as plt
-from util import bin_events_over_time, detect_peaks_in_event_counts, estimate_frequency
+from util import bin_events_over_time, detect_peaks_in_event_counts, estimate_frequency, align_signal
 import numpy as np
+import math
+
+frequency_key_map = {
+	10: '__10Hz', 25: '__25Hz', 50: '__50Hz', 100: '__100Hz', 250: '__250Hz',
+	500: '__500Hz', 1000: '1k', 2500: '2.5k', 5000: '5k', 10000: '10k', 20000: '20k'
+}
 
 def visualize_data_raws(raws, lables, dt = 500, start_ts = 0.5 * 1e6, boxes = None):
 	num_histograms = len(raws)
@@ -116,4 +122,89 @@ def create_combined_plot(events, frequency, total_duration=1e6, small_delta_t=10
 	axs[1].grid(True)
 
 	plt.tight_layout()
+	plt.show()
+
+def plot_num_events_distance(events, frequencies):
+	periods = [math.ceil(1 / (f / 2)) for f in frequencies]
+
+	plt.figure(figsize=(12, 6))
+
+	for idx, frequency in enumerate(frequencies):
+		frequency_key = frequency_key_map.get(frequency)
+		if frequency_key not in events:
+			print(f"Warning: No data for frequency {frequency} Hz")
+			continue
+
+		freq_data = events[frequency_key]  # Dictionary with distances as keys
+		period = periods[idx]  # Period for current frequency
+
+		sorted_distances = sorted(freq_data.keys(), key=lambda x: float(x.replace("_", ".")))
+		datapoints = []
+		
+		for distance_key in sorted_distances:
+			signals = freq_data[distance_key]
+			
+			inner = []
+			for signal in signals:
+				aligned_signal = align_signal(signal, period)
+				avg_events = np.mean(aligned_signal[:period])
+				inner.append(avg_events)
+
+			avg_distance_events = np.average(inner)
+			datapoints.append(avg_distance_events)
+
+		plt.plot(datapoints, label=f'Frequency: {frequency} Hz', linestyle='-', marker='x')
+	
+	plt.xlabel('Index in Resampled Signals (Distance)')
+	plt.ylabel('Average Number of Events per Period')
+	plt.title('Effect of Distance on Number of Events per Blinking Period')
+	plt.legend()
+	plt.show()
+
+def plot_avg_events_per_frequency(events, frequencies):
+	periods = [math.ceil(1 / (f / 2)) for f in frequencies]
+
+	avg_events_per_frequency = []
+
+	for idx, frequency in enumerate(frequencies):
+		frequency_key = frequency_key_map.get(frequency)
+		if frequency_key not in events:
+			print(f"Warning: No data for frequency {frequency} Hz")
+			avg_events_per_frequency.append(np.nan)
+			continue
+
+		freq_data = events[frequency_key]
+		period = periods[idx]
+
+		all_averages = []
+		
+		for distance_key in freq_data.keys():
+			signals = freq_data[distance_key]
+			
+			inner = []
+			for signal in signals:
+				aligned_signal = align_signal(signal, period)
+				
+				if len(aligned_signal) >= period:
+					avg_events = np.nanmean(aligned_signal[:period])
+					inner.append(avg_events)
+				else:
+					print(f"Warning: Aligned signal for frequency {frequency} Hz and distance {distance_key} is too short.")
+					inner.append(np.nan)
+			
+			if inner:
+				avg_distance_events = np.nanmean(inner)
+				all_averages.append(avg_distance_events)
+
+		overall_avg = np.nanmean(all_averages) if all_averages else np.nan
+		avg_events_per_frequency.append(overall_avg)
+
+	plt.figure(figsize=(10, 6))
+	plt.plot(frequencies, avg_events_per_frequency, marker='o', linestyle='-')
+	plt.xlabel('Frequency (Hz)')
+	plt.ylabel('Average Number of Events per Blinking Period')
+	plt.title('Effect of Frequency on Average Number of Events per Blinking Period')
+	plt.xscale('log')
+	plt.xlim(10, 20000)
+	plt.grid(True, which="both", ls="--")
 	plt.show()
