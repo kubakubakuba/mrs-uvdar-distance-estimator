@@ -7,7 +7,7 @@ import math
 
 frequency_key_map = {
 	10: '__10Hz', 25: '__25Hz', 50: '__50Hz', 100: '__100Hz', 250: '__250Hz',
-	500: '__500Hz', 1000: '1k', 2500: '2.5k', 5000: '5k', 10000: '10k', 20000: '20k'
+	500: '__500Hz', 1000: '1k', 2500: '2.5k', 5000: '5k', 10000: '10k', 20000: '20k', 30000: '30k'
 }
 
 def visualize_data_raws(raws, lables, dt = 500, start_ts = 0.5 * 1e6, boxes = None):
@@ -124,7 +124,7 @@ def create_combined_plot(events, frequency, total_duration=1e6, small_delta_t=10
 	plt.tight_layout()
 	plt.show()
 
-def plot_num_events_distance(events, frequencies):
+def plot_avg_events_per_distance(events, frequencies):
 	periods = [math.ceil(1 / (f / 2)) for f in frequencies]
 
 	plt.figure(figsize=(12, 6))
@@ -159,7 +159,9 @@ def plot_num_events_distance(events, frequencies):
 	plt.ylabel('Average Number of Events per Period')
 	plt.title('Effect of Distance on Number of Events per Blinking Period')
 	plt.legend()
+	plt.savefig('avg_events_per_distance.png')
 	plt.show()
+
 
 def plot_avg_events_per_frequency(events, frequencies):
 	periods = [math.ceil(1 / (f / 2)) for f in frequencies]
@@ -207,4 +209,5 @@ def plot_avg_events_per_frequency(events, frequencies):
 	plt.xscale('log')
 	plt.xlim(10, 20000)
 	plt.grid(True, which="both", ls="--")
+	plt.savefig('avg_events_per_frequency.png')
 	plt.show()
