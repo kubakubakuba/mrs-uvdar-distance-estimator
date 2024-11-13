@@ -3,5 +3,6 @@ filtered/
 .venv/
 *.raw
 *.bias
+dataset/
 
 __pycache__/
