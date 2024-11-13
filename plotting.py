@@ -1,16 +1,11 @@
 from metavision_ml.preprocessing import viz_histo
 from metavision_ml.preprocessing.event_to_tensor import histo
 from matplotlib import pyplot as plt
-from util import bin_events_over_time, detect_peaks_in_event_counts, estimate_frequency, align_signal
+from scipy.signal import find_peaks
 import numpy as np
 import math
 
-frequency_key_map = {
-	10: '__10Hz', 25: '__25Hz', 50: '__50Hz', 100: '__100Hz', 250: '__250Hz',
-	500: '__500Hz', 1000: '1k', 2500: '2.5k', 5000: '5k', 10000: '10k', 20000: '20k', 30000: '30k'
-}
-
-def visualize_data_raws(raws, lables, dt = 500, start_ts = 0.5 * 1e6, boxes = None):
+def visualize_data_raws(raws, labels, dt = 500, start_ts = 0.5 * 1e6, boxes = None):
 	num_histograms = len(raws)
 	rows = 1
 	cols = int(np.ceil(num_histograms / rows))
@@ -35,7 +30,7 @@ def visualize_data_raws(raws, lables, dt = 500, start_ts = 0.5 * 1e6, boxes = No
 		im = viz_histo(volume[2])
 		ax = axes[idx]
 		ax.imshow(im)
-		ax.set_title(f'Raw data {lables[idx]}', fontsize=20)
+		ax.set_title(f'Raw data {labels[idx]}', fontsize=20)
 		ax.axis('off')
 
 		if boxes != None:
@@ -55,7 +50,7 @@ def visualize_data_raws(raws, lables, dt = 500, start_ts = 0.5 * 1e6, boxes = No
 	plt.tight_layout()
 	plt.show()
 
-def visualize_data_events(events_array, lables, dt = 500, start_ts = 0.5 * 1e6, boxes = None):
+def visualize_data_events(events_array, labels, dt = 500, start_ts = 0.5 * 1e6, boxes = None):
 	num_histograms = len(events_array)
 	rows = 1
 	cols = int(np.ceil(num_histograms / rows))
@@ -78,7 +73,7 @@ def visualize_data_events(events_array, lables, dt = 500, start_ts = 0.5 * 1e6, 
 		im = viz_histo(volume[2])
 		ax = axes[idx]
 		ax.imshow(im)
-		ax.set_title(f'Event data {lables[idx]}', fontsize=20)
+		ax.set_title(f'Event data {labels[idx]}', fontsize=20)
 		ax.axis('off')
 
 		if boxes != None:
@@ -98,70 +93,76 @@ def visualize_data_events(events_array, lables, dt = 500, start_ts = 0.5 * 1e6, 
 	plt.tight_layout()
 	plt.show()
 
+def align_signal(signal, period):
+	peaks, _ = find_peaks(signal, distance = max(int(period // 2), 1))
 
-def create_combined_plot(events, frequency, total_duration=1e6, small_delta_t=100):
-	counts, time_bins_ms = bin_events_over_time(events, total_duration, small_delta_t)
-	peaks, peak_times = detect_peaks_in_event_counts(counts, time_bins_ms)
-	#freqs, power, dominant_freq = perform_fft_analysis(counts, small_delta_t)
+	if peaks.size > 0:
+		#align to the first detected peak
+		start_index = peaks[0]
+		return signal[start_index:]
+	
+	else:
+		#if no peaks are found, return the signal as is
+		return signal
 
-	#frequency = estimate_frequency(events)
+def plot_avg_events_per_distance(events, resampled, frequencies):
+	# Calculate periods for each frequency (in seconds)
+	periods = [1 for f in frequencies]  # Periods in seconds
 
-	fig, axs = plt.subplots(1, 2, figsize=(25, 5))
-
-	axs[0].plot(time_bins_ms, counts)
-	axs[0].set_title('Event Counts Over Time')
-	axs[0].set_xlabel('Time (ms)')
-	axs[0].set_ylabel('Number of Events')
-	axs[0].grid(True)
-
-	axs[1].plot(time_bins_ms, counts)
-	axs[1].plot(peak_times, counts[peaks], 'ro')
-	axs[1].set_title(f'Event Counts with Detected Peaks\nEstimated Frequency: {frequency:.2f} Hz')
-	axs[1].set_xlabel('Time (ms)')
-	axs[1].set_ylabel('Number of Events')
-	axs[1].grid(True)
-
-	plt.tight_layout()
-	plt.show()
-
-def plot_avg_events_per_distance(events, frequencies):
-	periods = [math.ceil(1 / (f / 2)) for f in frequencies]
-	print(periods)
 	plt.figure(figsize=(12, 6))
 
-	for idx, frequency in enumerate(frequencies):
-		frequency_key = frequency_key_map.get(frequency)
-		if frequency_key not in events:
-			print(f"Warning: No data for frequency {frequency} Hz")
-			continue
+	# Initialize a list of lists to store datapoints for each frequency
+	datapoints_by_frequency = [[] for _ in frequencies]
 
-		freq_data = events[frequency_key]  # Dictionary with distances as keys
-		period = periods[idx]  # Period for current frequency
+	for idx, distance_events in enumerate(resampled):  # Each distance level
+		for freq_idx, signal in enumerate(distance_events):  # Each frequency within that distance
 
-		sorted_distances = sorted(freq_data.keys(), key=lambda x: float(x.replace("_", ".")))
-		datapoints = []
-		
-		for distance_key in sorted_distances:
-			signals = freq_data[distance_key]
-			
-			inner = []
-			for signal in signals:
-				aligned_signal = align_signal(signal, period)
-				avg_events = np.mean(aligned_signal[:period])
-				inner.append(avg_events)
+			if len(signal) == 0:
+				continue
 
-			avg_distance_events = np.average(inner)
-			datapoints.append(avg_distance_events)
+			event_times = events[idx][freq_idx]['t']
+			if len(event_times) == 0:
+				continue
 
-		plt.plot(datapoints, label=f'Frequency: {frequency} Hz', linestyle='-', marker='x')
-	
-	plt.xlabel('Index in Resampled Signals (Distance)')
+			max_t = event_times.max()
+			min_t = event_times.min()
+			duration = max_t - min_t  # Duration in milliseconds
+
+			if duration <= 0:
+				continue
+
+			sampling_rate = len(signal) / duration  # Samples per millisecond
+			period_ms = periods[freq_idx] * 1000    # Period in milliseconds
+			period_samples = int(period_ms * sampling_rate)
+
+			# Debug statements to verify calculations
+			print(f"Distance index: {idx}")
+			print(f"Frequency index: {freq_idx}")
+			print(f"min_t: {min_t}, max_t: {max_t}")
+			print(f"Duration (ms): {duration}")
+			print(f"Sampling rate (samples/ms): {sampling_rate}")
+			print(f"Period (ms): {period_ms}")
+			print(f"Period samples: {period_samples}")
+
+			aligned_signal = align_signal(signal, period_ms)
+
+			if aligned_signal.size >= period_samples:
+				avg_events = np.mean(aligned_signal[:period_samples])
+			else:
+				avg_events = np.mean(aligned_signal) if aligned_signal.size > 0 else 0
+
+			datapoints_by_frequency[freq_idx].append(avg_events)
+
+	# Plot data for each frequency over distances
+	for freq_idx, datapoints in enumerate(datapoints_by_frequency):
+		if datapoints:  # Only plot if there are datapoints
+			plt.plot(datapoints, label=f'Frequency: {frequencies[freq_idx]} Hz', linestyle='-', marker='x')
+
+	plt.xlabel('Distance Index')
 	plt.ylabel('Average Number of Events per Period')
 	plt.title('Effect of Distance on Number of Events per Blinking Period')
 	plt.legend()
-	plt.savefig('avg_events_per_distance.png')
 	plt.show()
-
 
 def plot_avg_events_per_frequency(events, frequencies):
 	periods = [math.ceil(1 / (f / 2)) for f in frequencies]
