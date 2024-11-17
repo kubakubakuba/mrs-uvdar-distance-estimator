@@ -24,45 +24,37 @@ class Signal:
 	def get_length(self):
 		return self.length
 
-def resample_by_polarity(events):
+def resample_by_polarity(events, bin_width_us=10):
 	'''
-		Resamples the signal by sum of event polarities.
+	Resamples the signal by summing event polarities within fixed time bins.
 
-		This gives a periodically sampled 1D signal that can be used for frequency estimation.
-	
-		Args:
-			events: An array of events.
+	Args:
+		events: An array of events.
+		bin_width_us: Width of each time bin in microseconds.
 
-		Returns:
-			A 1D signal created by summing the polarities of events at each timestamp.
+	Returns:
+		signal: A 1D numpy array where each element is the sum of polarities within a bin.
+		time_axis: The timestamps corresponding to each bin.
 	'''
-
-	#raw.reset()
-
-	#events = raw.load_n_events(-1)
-
-	# Create a 1D signal by summing the polarities of events
-
-	# Get the maximum timestamp
-
 	if len(events) == 0:
-		return np.array([])
-
-	max_t = np.max(events['t'])
-	min_t = np.min(events['t'])
-
-	# Create a 1D signal with the same length as the recording
-
-	signal = np.zeros(max_t + 1)
-
-	# Sum the polarities of events at each timestamp
-
-	for event in events:
-		signal[event['t']] += event['p']
-
-	#res = Signal(signal, min_t, max_t)
-
-	return signal
+		return np.array([]), np.array([])
+	
+	timestamps = events['t']
+	polarities = events['p']
+	
+	min_t = np.min(timestamps)
+	max_t = np.max(timestamps)
+	
+	# Define bin edges
+	bin_edges = np.arange(min_t, max_t + bin_width_us, bin_width_us)
+	
+	# Use numpy histogram to bin the data
+	signal, _ = np.histogram(timestamps, bins=bin_edges, weights=polarities)
+	
+	# Create time axis
+	time_axis = bin_edges[:-1]  # Left edges of the bins
+	
+	return signal, time_axis
 
 def raw_load_events(raw, dtime = 5000, start_ts = 0.25 * 1e6):
 	'''
@@ -123,5 +115,11 @@ def apply(func, arr, *args, **kwargs):
 
 	if isinstance(arr, list):
 		return [apply(func, x, *args, **kwargs) for x in arr]
+	else:
+		return func(arr, *args, **kwargs)
+	
+def recursive_map(func, arr, *args, **kwargs):
+	if isinstance(arr, list):
+		return list(map(lambda x: recursive_map(func, x, *args, **kwargs), arr))
 	else:
 		return func(arr, *args, **kwargs)
