@@ -110,39 +110,51 @@ def process_event_data(events, frequency, prominence_value=None):
 	'''
 	Processes event data to compute the average number of events per blinking period.
 	'''
-	# Calculate expected period
-	expected_period_us = 1e6 / frequency  # Period in microseconds
+	# calculate expected period
+	expected_period_us = 1e6 / frequency  # period in microseconds
 	
-	# Adjust bin_width_us based on frequency
-	bins_per_period = 10  # Number of bins per period
-	min_bin_width_us = 20  # Minimum bin width
+	# adjust bin_width_us based on frequency
+	bins_per_period = 10  # number of bins per period
+	min_bin_width_us = 20  # minimum bin width
 	bin_width_us = expected_period_us / bins_per_period
 	bin_width_us = max(bin_width_us, min_bin_width_us)
 	bin_width_us = int(bin_width_us)
 	
-	# Resample the events
+	# resample the events
 	signal, time_axis = resample_by_polarity(events, bin_width_us)
 	
-	# Calculate distance_samples
 	distance_samples = expected_period_us / bin_width_us
 	distance_samples = max(distance_samples, 1)
 	distance_samples = int(distance_samples)
 	
-	# Detect peaks
+	# peaks detection
 	peak_indices = detect_blinking_periods(signal, distance_samples, prominence=prominence_value)
 	
-	# Segment events based on peaks
+	# segment events based on peaks
 	event_counts = segment_events_by_peaks(events, time_axis, peak_indices)
 	
-	# Compute average
+	# compute average
 	avg_events = np.mean(event_counts)
-	
-	return avg_events, event_counts, signal, time_axis, peak_indices
 
-def plot_avg_events_vs_distance(distances, avg_events_array, frequencies):
+	# compute mean
+	std_events = np.std(event_counts)
+	
+	res = {
+		'avg_events': avg_events,
+		'std_events': std_events,
+		'event_counts': event_counts,
+		'signal': signal,
+		'time_axis': time_axis,
+		'peak_indices': peak_indices
+	}
+
+	return res
+
+def plot_avg_events_vs_distance(distances, avg_events_array, std_events_array, frequencies):
 	for freq_idx, frequency in enumerate(frequencies):
 		avg_events_per_distance = avg_events_array[:, freq_idx]
-		plt.plot(distances, avg_events_per_distance, marker='o', label=f'{frequency} Hz')
+		std_events_per_distance = std_events_array[:, freq_idx]
+		plt.errorbar(distances, avg_events_per_distance, yerr=std_events_per_distance, marker='o', label=f'{frequency} Hz')
 	
 	plt.xlabel('Distance (meters)')
 	plt.ylabel('Average Events per Blinking Period')
@@ -151,10 +163,11 @@ def plot_avg_events_vs_distance(distances, avg_events_array, frequencies):
 	plt.grid(True)
 	plt.show()
 
-def plot_log_avg_events_vs_distance(distances, avg_events_array, frequencies):
+def plot_log_avg_events_vs_distance(distances, avg_events_array, std_events_array, frequencies):
 	for freq_idx, frequency in enumerate(frequencies):
 		avg_events_per_distance = avg_events_array[:, freq_idx]
-		plt.plot(distances, avg_events_per_distance, marker='o', label=f'{frequency} Hz')
+		std_events_per_distance = std_events_array[:, freq_idx]
+		plt.errorbar(distances, avg_events_per_distance, yerr=std_events_per_distance, marker='o', label=f'{frequency} Hz')
 	
 	plt.xlabel('Distance (meters)')
 	plt.ylabel('Log of Average Events per Blinking Period')
