@@ -205,3 +205,30 @@ def plot_log_avg_events_vs_frequency(frequencies, avg_events_array, std_events_a
 	plt.legend()
 	plt.grid(True)
 	plt.show()
+
+def plot_avg_events_vs_angle(angles, avg_events_array, std_events_array, frequencies, label=""):
+	for freq_idx, frequency in enumerate(frequencies):
+		avg_events_per_angle = avg_events_array[:, freq_idx]
+		std_events_per_angle = std_events_array[:, freq_idx]
+		plt.errorbar(angles, avg_events_per_angle, yerr=std_events_per_angle, marker='o', label=f'{frequency} Hz')
+	
+	plt.xlabel('Angle (degrees)')
+	plt.ylabel('Average Events per Blinking Period')
+	plt.title(f'Influence of Angle on Average Events per Period{label}')
+	plt.legend()
+	plt.grid(True)
+	plt.show()
+
+def plot_log_avg_events_vs_angle(angles, avg_events_array, std_events_array, frequencies, label=""):
+	for freq_idx, frequency in enumerate(frequencies):
+		avg_events_per_angle = avg_events_array[:, freq_idx]
+		std_events_per_angle = std_events_array[:, freq_idx]
+		plt.errorbar(angles, avg_events_per_angle, yerr=std_events_per_angle, marker='o', label=f'{frequency} Hz')
+	
+	plt.xlabel('Angle (degrees)')
+	plt.ylabel('Log of Average Events per Blinking Period')
+	plt.title(f'Influence of Angle on Log of Average Events per Period{label}')
+	plt.yscale('log')
+	plt.legend()
+	plt.grid(True)
+	plt.show()

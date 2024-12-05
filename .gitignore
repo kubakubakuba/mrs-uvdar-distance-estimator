@@ -4,6 +4,8 @@ filtered/
 *.raw
 *.bias
 dataset/
+angle_dataset/
 
 __pycache__/
 ignore/
+uav_script.py
