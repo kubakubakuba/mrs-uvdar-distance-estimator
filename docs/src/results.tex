@@ -1,6 +1,105 @@
 %!TEX root = ../main.tex
 
-\chapter{Data processing\label{chap:how_to}}
+\chapter{Data processing\label{chap:data_processing}}
+
+The data has ben analyzed using Python in a Jupyter notebook\footnote{Source code is available at: \url{https://github.com/kubakubakuba/mrs-uvdar-distance-estimator}}, with libraries from Metavision SDK.
 
 \section{Distance - frequency influence}
 
+The distance frequency dataset has recordings of the UAV placed at 0 and 45 degrees relative to the event camera. This ensures data is captured from either
+one LED source pointed directly at the event camera, or 2 LED sources pointed at the event camera at an angle. At each distance a new subdirectory was
+created, with its name being the distance in meters and the content being the recordings of various frequencies in sequence, ordered by the recording timetamp.
+
+With the range of frequencies\footnote{The frequencies represented in this list are the actual frequencies sent to the UVDAR unit. The preserved frequencies
+are half of the values in this list - UVDAR recognizes the frequency with a reference to the length of the sequence (2 for on/off).} and distances being
+
+\begin{lstlisting}
+frequencies_Hz = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000]
+distances_m = [1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 4.0, 5.0]
+\end{lstlisting}
+
+We can load the dataset stored in raw files into a matrix representing the distances and frequencies, then load a select amount of events from each file.
+The data is then resampled to a 1D array by summing polarities over a select bin width. Peaks in this signal are then analyzed by scipy's findpeaks function,
+and the average amount of events with the standard deviation is calculated for each frequency and distance.
+
+We can see the influence of distance and frequency on the average number of events on
+\reffig{fig:dist} and \reffig{fig:freqs} respectively. If we fit a inverse square law function,
+which can be expressed as
+\begin{equation}
+	\text{intensity} \propto \frac{1}{\text{distance}^2}
+\end{equation}
+to the data shown in \reffig{fig:fit1}, we can that the model approximates the data reasonably well.
+More complex functions could be used to fit the data, but it would rather tend to overfitting instead
+of representing the data in a more general way.
+
+\begin{figure}[htbp]
+	\centering
+	\subfloat[Influence of distance on the average number of events.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/plots/dist.pdf}
+	  \label{fig:dist_1}
+	}
+	\subfloat[Influence of distance on the log of average number of events.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/plots/distlog.pdf}
+	  \label{fig:dist_2}
+	}
+	\caption{
+  The influence of distance on the average number of events with the UAV rotated 0 degrees relative to the event camera on \reffig{fig:dist_1}, and with the log of the average number of events on \reffig{fig:dist_2}.
+  }
+	\label{fig:dist}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\subfloat[Influence of frequency on the average number of events.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/plots/freqs.pdf}
+	  \label{fig:freqs_1}
+	}
+	\subfloat[Influence of frequency on the log of average number of events.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/plots/freqslog.pdf}
+	  \label{fig:freqs_2}
+	}
+	\caption{
+  The influence of frequency on the average number of events with the UAV rotated 0 degrees relative to the event camera on \reffig{fig:freqs_1}, and with the log of the average number of events on \reffig{fig:freqs_2}.
+  }
+	\label{fig:freqs}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.75\textwidth]{./fig/plots/fit.pdf}
+	\caption{Influence of distance data fitted with polynomial and exponential function.}
+	\label{fig:fit1}
+  \end{figure}
+
+\newpage
+
+\subsection{Rotation angle influence}
+
+From the manufacturers datasheet for the UV LEDs\footnote{The datasheet of ProLight PM2B-1LLE 1W UV Power LED can be obtained from \url{https://www.tme.eu/Document/9dfb498784ffdd07892a42f4f17c6f37/PM2B-1LLE-DTE.pdf}}
+used in the UVDAR system, we can learn that the LEDs have a lambertian radiation pattern,
+which can be seen on \reffig{fig:lambertian}.
+
+\begin {figure}[htbp]
+	\centering
+	\includegraphics[width=0.75\textwidth]{./fig/plots/lambertian/lambertian.pdf}
+	\caption{Lambertian radiation pattern of the UV LED.}
+	\label{fig:lambertian}
+\end{figure}
+
+This means that the intensity of the light emmited from the LED decreases with the cosine
+of the angle between the normal of the LED and the direction of the light \refeq{eq:lambertian}.
+
+\begin{equation}
+	I(\theta) = I_0\cos(\theta)
+	\label{eq:lambertian}
+\end{equation}
+
+If we shift those distributions by $\pm 45$ degrees and sum them together, we can see the
+theoretical distribution of the light emmited from the singular UAV arm \reffig{fig:lambert_combined}.
+
+\begin {figure}[htbp]
+	\centering
+	\includegraphics[width=0.75\textwidth]{./fig/plots/lambertian/3lambertian.pdf}
+	\caption{Radiation pattern of two lambertian light sources shifted by $\pm 45$ degrees.}
+	\label{fig:lambert_combined}
+\end{figure}

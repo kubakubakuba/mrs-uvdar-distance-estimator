@@ -12,13 +12,11 @@ Each pixel memorizes the last intensity value and sends an event when the intens
 Event cameras circumvent many common issues found in traditional frame-based cameras, such as motion blur caused
 by fast-moving objects. They offer significant advantages, including a high dynamic range, low latency,
 and energy efficiency.
-
 This makes them perfect fot the application of agile robotics,
 where the fast response time is crucial (especially in \ac{UAV} swarming situations). With their sub-millisecond response time,
-event cameras can provide a significant advantage over traditional cameras in these applications. \cite{gallego2020event}
-
+event cameras can provide a significant advantage over traditional cameras in these applications.
 However, they also come with some drawbacks, such as the need for a different approach to
-data processing and the higher cost of the camera units themselves.
+data processing and the higher cost of the camera units themselves. \cite{gallego2020event}
 
 The event data stream is represented by tuples of $(x, y, p, t)$, where $(x, y)$ are the pixel coordinates, $t$ is the time of
 intensity change and $p$ is the polarity of the change - the increase or decrease of light intensity. Images can be 
@@ -27,13 +25,10 @@ intensity change and $p$ is the polarity of the change - the increase or decreas
 
 \section{Equipment}
 
-The event based camera used in this work is the model EVK4, manufactured by Prophesee. The camera has a resolution of 
+The event based camera used in this work is the model EVK4\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.}, manufactured by Prophesee. The camera has a resolution of 
 $1280 \times 720$ pixels, with maximum frame rate equivalent of 10k fps and a dynamic range of 120 dB.
 A fish eye lens with an inbuilt UV filter was used during the measurements to target the specific wavelength of the LEDs
 that are used on the UAVs. The camera is shown on \reffig{fig:evk4}. 
-
-%fig/photos/ekv4.png
-
 
 \begin{figure}[htbp]
   \centering
