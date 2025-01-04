@@ -150,7 +150,7 @@ def process_event_data(events, frequency, prominence_value=None):
 
 	return res
 
-def plot_avg_events_vs_distance(distances, avg_events_array, std_events_array, frequencies):
+def plot_avg_events_vs_distance(distances, avg_events_array, std_events_array, frequencies, title="Influence of Distance on Average Events per Period"):
 	for freq_idx, frequency in enumerate(frequencies):
 		avg_events_per_distance = avg_events_array[:, freq_idx]
 		std_events_per_distance = std_events_array[:, freq_idx]
@@ -158,12 +158,12 @@ def plot_avg_events_vs_distance(distances, avg_events_array, std_events_array, f
 	
 	plt.xlabel('Distance (meters)')
 	plt.ylabel('Average Events per Blinking Period')
-	plt.title('Influence of Distance on Average Events per Period')
+	plt.title(f'{title}')
 	plt.legend()
 	plt.grid(True)
 	plt.show()
 
-def plot_log_avg_events_vs_distance(distances, avg_events_array, std_events_array, frequencies):
+def plot_log_avg_events_vs_distance(distances, avg_events_array, std_events_array, frequencies, title="Influence of Distance on Log of Average Events per Period"):
 	for freq_idx, frequency in enumerate(frequencies):
 		avg_events_per_distance = avg_events_array[:, freq_idx]
 		std_events_per_distance = std_events_array[:, freq_idx]
@@ -171,13 +171,13 @@ def plot_log_avg_events_vs_distance(distances, avg_events_array, std_events_arra
 	
 	plt.xlabel('Distance (meters)')
 	plt.ylabel('Log of Average Events per Blinking Period')
-	plt.title('Influence of Distance on Log of Average Events per Period')
+	plt.title(f'{title}')
 	plt.yscale('log')
 	plt.legend()
 	plt.grid(True)
 	plt.show()
 	
-def plot_avg_events_vs_frequency(frequencies, avg_events_array, std_events_array, distances):
+def plot_avg_events_vs_frequency(frequencies, avg_events_array, std_events_array, distances, title="Influence of Frequency on Average Events per Period"):
 	for distance_idx, distance in enumerate(distances):
 		avg_events_per_frequency = avg_events_array[distance_idx, :]
 		std_events_per_frequency = std_events_array[distance_idx, :]
@@ -185,13 +185,13 @@ def plot_avg_events_vs_frequency(frequencies, avg_events_array, std_events_array
 	
 	plt.xlabel('Frequency (Hz)')
 	plt.ylabel('Average Events per Blinking Period')
-	plt.title('Influence of Frequency on Average Events per Period')
+	plt.title(f'{title}')
 	plt.xscale('log')
 	plt.legend()
 	plt.grid(True)
 	plt.show()
 
-def plot_log_avg_events_vs_frequency(frequencies, avg_events_array, std_events_array, distances):
+def plot_log_avg_events_vs_frequency(frequencies, avg_events_array, std_events_array, distances, title="Influence of Frequency on Log of Average Events per Period"):
 	for distance_idx, distance in enumerate(distances):
 		avg_events_per_frequency = avg_events_array[distance_idx, :]
 		std_events_per_frequency = std_events_array[distance_idx, :]
@@ -199,7 +199,7 @@ def plot_log_avg_events_vs_frequency(frequencies, avg_events_array, std_events_a
 	
 	plt.xlabel('Frequency (Hz)')
 	plt.ylabel('Log of Average Events per Blinking Period')
-	plt.title('Influence of Frequency on Log of Average Events per Period')
+	plt.title(f'{title}')
 	plt.xscale('log')
 	plt.yscale('log')
 	plt.legend()
