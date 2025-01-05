@@ -19,7 +19,9 @@ However, they also come with some drawbacks, such as the need for a different ap
 data processing and the higher cost of the camera units themselves. \cite{gallego2020event}
 
 The event data stream is represented by tuples of $(x, y, p, t)$, where $(x, y)$ are the pixel coordinates, $t$ is the time of
-intensity change and $p$ is the polarity of the change - the increase or decrease of light intensity. Images can be 
+intensity change and $p$ is the polarity of the change - the increase or decrease of light intensity. Images can be
+reconstructed from the event stream by integrating the events over time, doing so makes the usage of normal vision 
+algorithms is possible, but is also goes against the main advantage of the event cameras - the low latency.
 
 \chapter{Measurements\label{chap:measurements}}
 

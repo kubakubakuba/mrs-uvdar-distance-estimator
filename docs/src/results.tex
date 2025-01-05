@@ -11,7 +11,7 @@ one LED source pointed directly at the event camera, or 2 LED sources pointed at
 created, with its name being the distance in meters and the content being the recordings of various frequencies in sequence, ordered by the recording timetamp.
 
 With the range of frequencies\footnote{The frequencies represented in this list are the actual frequencies sent to the UVDAR unit. The preserved frequencies
-are half of the values in this list - UVDAR recognizes the frequency with a reference to the length of the sequence (2 for on/off).} and distances being
+are half of the values in this list - UVDAR interprets the frequency with a reference to the length of the sequence (2 for on/off).} and distances being
 
 \begin{lstlisting}
 frequencies_Hz = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 20000, 30000]
@@ -28,7 +28,8 @@ which can be expressed as
 \begin{equation}
 	\text{intensity} \propto \frac{1}{\text{distance}^2}
 \end{equation}
-to the data shown in \reffig{fig:fit1}, we can that the model approximates the data reasonably well.
+to the data shown in \reffig{fig:fit1}, we can show that the inverse square law model
+approximates the data reasonably well.
 More complex functions could be used to fit the data, but it would rather tend to overfitting instead
 of representing the data in a more general way.
 
@@ -96,10 +97,55 @@ of the angle between the normal of the LED and the direction of the light \refeq
 
 If we shift those distributions by $\pm 45$ degrees and sum them together, we can see the
 theoretical distribution of the light emmited from the singular UAV arm \reffig{fig:lambert_combined}.
-
 \begin {figure}[htbp]
 	\centering
 	\includegraphics[width=0.75\textwidth]{./fig/plots/lambertian/3lambertian.pdf}
 	\caption{Radiation pattern of two lambertian light sources shifted by $\pm 45$ degrees.}
 	\label{fig:lambert_combined}
+\end{figure}
+With the dataset of the rotation of the UAV relative to the camera we will get the following results
+on \reffig{fig:angles}.
+
+\begin{figure}[htbp]
+	\centering
+	\subfloat[Influence of rotation of the UAV on the log of average number of events at 0.5 m.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/plots/angle/angle1.pdf}
+	  \label{fig:angle_1}
+	}
+	% \subfloat[Influence of rotation of the UAV on the log of average number of events at 1 m.] {
+	%   \includegraphics[width=0.5\textwidth]{./fig/plots/angle/angle2.pdf}
+	%   \label{fig:angle_2}
+	% }
+	\subfloat[Influence of rotation of the UAV on the log of average number of events at 2 m.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/plots/angle/angle3.pdf}
+	  \label{fig:angle_3}
+	}
+	\caption{
+  The influence of rotation angle on the log of average number of events at 0.5 m on \reffig{fig:angle_1} and at 2 m on \reffig{fig:angle_3}.
+  }
+	\label{fig:angles}
+\end{figure}
+
+The data shows a rough approximation of the theoretical distribution on \reffig{fig:lambert_combined},
+but with a drop of intensity at the middle of the distribution. This could be caused
+by the fact that the LEDs, when close to the camera, can be percieved as multiple sources,
+but when moved further away, they merge into one source as shown on \reffig{fig:leds}.
+
+\begin{figure}[htbp]
+	\centering
+	\subfloat[2 LEDs with blinking frequency of 10 Hz at 0.5 m.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/photos/2leds_05m.png}
+	  \label{fig:leds_1}
+	}
+	\subfloat[2 LEDs with blinking frequency of 10 Hz at 2 m.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/photos/2leds_2m.png}
+	  \label{fig:leds_2}
+	}
+	\caption{
+  The light source on one arm of the UAV, consisting of two UV LEDs, blinking at a frequency of 10 Hz,
+  placed at 0.5 m on \reffig{fig:leds_1} and 2 m at \reffig{fig:leds_2}. Star-like shape of
+  the led source is caused by light diffraction affecting that is happening when the intense
+  monochromatic light enters the camera lens aperture.
+  }
+	\label{fig:leds}
 \end{figure}
