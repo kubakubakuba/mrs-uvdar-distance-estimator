@@ -2,14 +2,17 @@
 
 \chapter{Data processing\label{chap:data_processing}}
 
-The data has ben analyzed using Python in a Jupyter notebook\footnote{Source code is available at: \url{https://github.com/kubakubakuba/mrs-uvdar-distance-estimator}}, with libraries from Metavision SDK.
+The data has ben analyzed using Python in a Jupyter notebook
+\footnote{Source code is available at: \url{https://github.com/kubakubakuba/mrs-uvdar-distance-estimator}},
+with libraries from Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}}.
+The notebook if divided into sections that represent several datasets that were recorded during the measurements.
+Precomputed average number of events with the standard deviation is stored in \texttt{.npz} files in the \texttt{./data} directory.
 
 \section{Distance - frequency influence}
 
 The distance frequency dataset has recordings of the UAV placed at 0 and 45 degrees relative to the event camera. This ensures data is captured from either
 one LED source pointed directly at the event camera, or 2 LED sources pointed at the event camera at an angle. At each distance a new subdirectory was
 created, with its name being the distance in meters and the content being the recordings of various frequencies in sequence, ordered by the recording timetamp.
-
 With the range of frequencies\footnote{The frequencies represented in this list are the actual frequencies sent to the UVDAR unit. The preserved frequencies
 are half of the values in this list - UVDAR interprets the frequency with a reference to the length of the sequence (2 for on/off).} and distances being
 
@@ -19,19 +22,20 @@ distances_m = [1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 4.0, 5.0]
 \end{lstlisting}
 
 We can load the dataset stored in raw files into a matrix representing the distances and frequencies, then load a select amount of events from each file.
-The data is then resampled to a 1D array by summing polarities over a select bin width. Peaks in this signal are then analyzed by scipy's findpeaks function,
+The data is then resampled to a 1D array by summing polarities over a select bin width
+\footnote{The bin width should be adjusted appropriately, as the farther the event camera is from the source, the fewer events are generated.}.
+Peaks in this signal are then analyzed by scipy's findpeaks function,
 and the average amount of events with the standard deviation is calculated for each frequency and distance.
 
 We can see the influence of distance and frequency on the average number of events on
-\reffig{fig:dist} and \reffig{fig:freqs} respectively. If we fit a inverse square law function,
-which can be expressed as
+\reffig{fig:dist} and \reffig{fig:freqs} respectively. If we now select one frequency and try to fit it with a curve,
+we can see that the data can be approximated with a polynomial or exponential function as shown on \reffig{fig:fit1}.
+The best fit without being too complex, is the inverse square law, which can be expressed as
 \begin{equation}
 	\text{intensity} \propto \frac{1}{\text{distance}^2}
 \end{equation}
-to the data shown in \reffig{fig:fit1}, we can show that the inverse square law model
-approximates the data reasonably well.
 More complex functions could be used to fit the data, but it would rather tend to overfitting instead
-of representing the data in a more general way.
+of representing the data in a more general way. The inverse square law approximates the data relatively well.
 
 \begin{figure}[htbp]
 	\centering
@@ -67,7 +71,7 @@ of representing the data in a more general way.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.90\textwidth]{./fig/plots/fit.pdf}
+	\includegraphics[width=0.90\textwidth]{./fig/plots/inverse_square/square.pdf}
 	\caption{Influence of distance data fitted with polynomial and exponential function.}
 	\label{fig:fit1}
   \end{figure}

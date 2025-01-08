@@ -3,17 +3,19 @@
 \chapter{Introduction\label{chap:introduction}}
 
 This semestral project is focused on measuring the influence of distance and frequency of modulated
-light source on event based camera response.
+light source on event based camera response. Knowing the parameters of the light source, the camera with the lens
+and how the response behaves, it is possible to predict the distance of the light source from the camera. This can be
+used to improve the precision of localization algorithms, that are used in \ac{UAV} swarming applications. 
 
 Event based cameras, in contrast to traditional frame based cameras, do not capture still frames but rather
 provide an asynchronous and idependent stream of intensity changes on individual pixels.
-Each pixel memorizes the last intensity value and sends an event when the intensity changes above a certain threshold.  \cite{gallego2020event}
-
+Each pixel memorizes the last intensity value and sends an event when the intensity changes above a certain threshold.
+%\cite{gallego2020event}
 Event cameras circumvent many common issues found in traditional frame-based cameras, such as motion blur caused
 by fast-moving objects. They offer significant advantages, including a high dynamic range, low latency,
 and energy efficiency.
 This makes them perfect fot the application of agile robotics,
-where the fast response time is crucial (especially in \ac{UAV} swarming situations). With their sub-millisecond response time,
+where the fast response time is crucial (especially in UAV swarming situations). With their sub-millisecond response time,
 event cameras can provide a significant advantage over traditional cameras in these applications.
 However, they also come with some drawbacks, such as the need for a different approach to
 data processing and the higher cost of the camera units themselves. \cite{gallego2020event}
@@ -23,81 +25,23 @@ intensity change and $p$ is the polarity of the change - the increase or decreas
 reconstructed from the event stream by integrating the events over time, doing so makes the usage of normal vision 
 algorithms is possible, but is also goes against the main advantage of the event cameras - the low latency.
 
-\chapter{Measurements\label{chap:measurements}}
+\section{Related Works}
 
-\section{Equipment}
+The unique capabilities of event-based cameras have been extensively explored in various applications and studies.
+A comprehensive survey by Gallego et al. \cite{gallego2020event} highlights the advantages of event cameras in
+applications requiring high-speed motion analysis, wide dynamic range, and low power consumption.
+%The survey also addresses the challenges of processing the asynchronous and sparse event data these cameras generate, 
+%emphasizing the need for novel algorithms tailored to this unconventional sensing paradigm.
 
-The event based camera used in this work is the model EVK4\footnote{Prophesee EVK4 website: \url{https://www.prophesee.ai/event-camera-evk4/}.}, manufactured by Prophesee. The camera has a resolution of 
-$1280 \times 720$ pixels, with maximum frame rate equivalent of 10k fps and a dynamic range of 120 dB.
-A fish eye lens with an inbuilt UV filter was used during the measurements to target the specific wavelength of the LEDs
-that are used on the UAVs. The camera is shown on \reffig{fig:evk4}. 
+The potential of event cameras in vehicular \ac{VLC} has been demonstrated by Shen et al.
+\cite{shen2019vehicular}. Their study introduced a framework utilizing a \ac{DVS} to mitigate the limitations of
+traditional photodiode- and frame-based camera systems, such as limited throughput and vulnerability to ambient
+interference. By leveraging the event-driven nature of DVS, the proposed system achieved significant improvements
+in data transmission range and robustness.
 
-\begin{figure}[htbp]
-  \centering
-  \subfloat[EVK4 event-based camera.] {
-    \includegraphics[width=0.3\textwidth]{./fig/photos/evk4.png}
-    \label{fig:evk4_1}
-  }
-  \subfloat[EVK4 event-based camera with a fish eye lens.] {
-    \includegraphics[width=0.3\textwidth]{./fig/photos/lens.png}
-    \label{fig:evk4_2}
-  }
-  \caption{
-The event based camera EVK4 from Prophesee, on \reffig{fig:evk4_1}, with a fish eye lens on \reffig{fig:evk4_2}.
-}
-  \label{fig:evk4}
-\end{figure}
-
-The data from the camera has been obtained using the Metavision Studio software, which records the data in the .raw format.
-Data is then later processed using various functions of the Metavision SDK, which has either C++ or Python API. In this work,
-the Python API has been used.
-
-\section{Data collection}
-
-The data has been collected on several occasions by measuring a stationary UAV which is a part of the MRS UVDAR system, that
-uses UV \ac{LED} sources for localization and communication between individual UAVs. 
-Each UAV is equipped with 8 UV LEDs, with 2 LEDs on each arm of the UAV. Each of the LEDs can be individually controlled
-and can be set to various sequences of blinking (not only on/off).
-
-\subsection{Initial measurements}
-
-The initial measurements were done by securing the event camera on a tripod and placing the UAV at distances ranging from
-$0.5$ to $2.5$ meters. The LEDs were set to blink at a frequency in range of $1$ Hz to $30$ kHz. No \ac{ROI} was set
-and the whole image has been recorded during the testing.
-
-This first experiment proved to be rather inefficient, as the LEDs need to be isolated from each other's influence, which
-was not done properly at this time. This problem is solvable in the post processing, by filtering out the events
-by using a ROI filter, but this proved rather inefficient.
-
-The other issue turned out to be the reflections of surrounding objects (as seen on \reffig{fig:meas1}), which caused
-another source of events in the recording.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.5\textwidth]{./fig/photos/meas1.png}
-  \caption{Visible reflections can be seen on the wall on the left side of the image.}
-  \label{fig:meas1}
-\end{figure}
-
-\subsection{Distance - frequency influence}
-
-In subsequent measurements, we consider one source of light as one whole arm of the UAV (with 2 UV LEDs). Measurements were
-done on areas isolated by ROI filter directly in Metavision Studio - events were collected only on a select area, with the
-rest of the events being discarded.
-
-This time, the position of the UAV was fixed relative to the camera on a blank background. The camera was placed on a tripod
-and moved by increments of $0.2$ meters, starting from $1$ meter and ending at $3$ meters, with additional measurements done
-at $4$ and $5$ meters.
-
-Frequency range of the LED modulation was set in a range from $10$ Hz to $30$ kHz.
-
-\subsection{Rotation angle influence}
-
-In addition to a distance and frequency influence, the rotation angle influence also needs to be considered, to
-verify the emitting characteristics of the light sources, if they can or cannot be considered lambertian.
-The UAV was rotated by increments of $45$ degrees relative to the event camera, at distances of $0.5$, $1$ and $2$ meters,
-with frequencies ranging from $10$ Hz to $10$ kHz. 
-
-\subsection{RSSR Data collection}
-
-Another data will be collected for the application of \ac{RSSR}, which will be an aim of by bachelor thesis.
+In addition to VLC, event-based cameras have been successfully integrated into localization systems, with promising
+results in indoor positioning. Bai et al. \cite{bai2021vlp} introduced the enhanced Camera-Assisted \ac{RSSR}
+algorithm, which combines visual data from event cameras with signal strength ratios from photodiodes.
+This algorithm achieves centimeter-level positioning accuracy while requiring minimal infrastructure,
+significantly improving the coverage and accuracy of localization systems. The RSSR approach demonstrates the
+potential for precise and efficient positioning in applications such as autonomous navigation and UAV swarming.

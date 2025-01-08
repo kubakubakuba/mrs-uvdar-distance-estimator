@@ -12,3 +12,4 @@ uav_script.py
 *.log
 *.aux
 *.out
+*.pdf
