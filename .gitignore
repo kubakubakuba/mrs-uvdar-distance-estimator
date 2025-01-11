@@ -13,3 +13,5 @@ uav_script.py
 *.aux
 *.out
 *.pdf
+
+rssr_dataset/
