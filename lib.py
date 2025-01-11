@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 from metavision_core.event_io import RawReader
 from scipy.signal import find_peaks
 
+
 def recursive_map(func, arr, *args, **kwargs):
 	'''
 	Recursively applies a function to a nested list and returns the modified list.
@@ -150,7 +151,9 @@ def process_event_data(events, frequency, prominence_value=None):
 
 	return res
 
-def plot_avg_events_vs_distance(distances, avg_events_array, std_events_array, frequencies, title="Influence of Distance on Average Events per Period"):
+def plot_avg_events_vs_distance(distances, avg_events_array, std_events_array, frequencies, title="Influence of Distance on Average Events per Period", save_pgf=False):
+	plt.figure()
+	
 	for freq_idx, frequency in enumerate(frequencies):
 		avg_events_per_distance = avg_events_array[:, freq_idx]
 		std_events_per_distance = std_events_array[:, freq_idx]
@@ -161,9 +164,16 @@ def plot_avg_events_vs_distance(distances, avg_events_array, std_events_array, f
 	plt.title(f'{title}')
 	plt.legend()
 	plt.grid(True)
-	plt.show()
 
-def plot_log_avg_events_vs_distance(distances, avg_events_array, std_events_array, frequencies, title="Influence of Distance on Log of Average Events per Period"):
+	if save_pgf:
+		print('Saving plot to avg_events_vs_distance.pgf')
+		plt.savefig('avg_events_vs_distance.pgf')
+	else:
+		plt.show()
+
+def plot_log_avg_events_vs_distance(distances, avg_events_array, std_events_array, frequencies, title="Influence of Distance on Log of Average Events per Period", save_pgf=False):
+	plt.figure()
+	
 	for freq_idx, frequency in enumerate(frequencies):
 		avg_events_per_distance = avg_events_array[:, freq_idx]
 		std_events_per_distance = std_events_array[:, freq_idx]
@@ -175,9 +185,17 @@ def plot_log_avg_events_vs_distance(distances, avg_events_array, std_events_arra
 	plt.yscale('log')
 	plt.legend()
 	plt.grid(True)
-	plt.show()
+
+	if save_pgf:
+		print('Saving plot to log_avg_events_vs_distance.pgf')
+		plt.savefig('log_avg_events_vs_distance.pgf')
+	else:
+		plt.show()
+
+
+def plot_avg_events_vs_frequency(frequencies, avg_events_array, std_events_array, distances, title="Influence of Frequency on Average Events per Period", save_pgf=False):
+	plt.figure()
 	
-def plot_avg_events_vs_frequency(frequencies, avg_events_array, std_events_array, distances, title="Influence of Frequency on Average Events per Period"):
 	for distance_idx, distance in enumerate(distances):
 		avg_events_per_frequency = avg_events_array[distance_idx, :]
 		std_events_per_frequency = std_events_array[distance_idx, :]
@@ -189,9 +207,16 @@ def plot_avg_events_vs_frequency(frequencies, avg_events_array, std_events_array
 	plt.xscale('log')
 	plt.legend()
 	plt.grid(True)
-	plt.show()
+	
+	if save_pgf:
+		print('Saving plot to avg_events_vs_frequency.pgf')
+		plt.savefig('avg_events_vs_frequency.pgf')
+	else:
+		plt.show()
 
-def plot_log_avg_events_vs_frequency(frequencies, avg_events_array, std_events_array, distances, title="Influence of Frequency on Log of Average Events per Period"):
+def plot_log_avg_events_vs_frequency(frequencies, avg_events_array, std_events_array, distances, title="Influence of Frequency on Log of Average Events per Period", save_pgf=False):
+	plt.figure()
+	
 	for distance_idx, distance in enumerate(distances):
 		avg_events_per_frequency = avg_events_array[distance_idx, :]
 		std_events_per_frequency = std_events_array[distance_idx, :]
@@ -204,9 +229,16 @@ def plot_log_avg_events_vs_frequency(frequencies, avg_events_array, std_events_a
 	plt.yscale('log')
 	plt.legend()
 	plt.grid(True)
-	plt.show()
 
-def plot_avg_events_vs_angle(angles, avg_events_array, std_events_array, frequencies, label=""):
+	if save_pgf:
+		print('Saving plot to log_avg_events_vs_frequency.pgf')
+		plt.savefig('log_avg_events_vs_frequency.pgf')
+	else:
+		plt.show()
+
+def plot_avg_events_vs_angle(angles, avg_events_array, std_events_array, frequencies, label="", save_pgf=False):
+	plt.figure()
+	
 	for freq_idx, frequency in enumerate(frequencies):
 		avg_events_per_angle = avg_events_array[:, freq_idx]
 		std_events_per_angle = std_events_array[:, freq_idx]
@@ -217,9 +249,16 @@ def plot_avg_events_vs_angle(angles, avg_events_array, std_events_array, frequen
 	plt.title(f'Influence of Angle on Average Events per Period{label}')
 	plt.legend()
 	plt.grid(True)
-	plt.show()
+	
+	if save_pgf:
+		print('Saving plot to avg_events_vs_angle.pgf')
+		plt.savefig('avg_events_vs_angle.pgf')
+	else:
+		plt.show()
 
-def plot_log_avg_events_vs_angle(angles, avg_events_array, std_events_array, frequencies, label=""):
+def plot_log_avg_events_vs_angle(angles, avg_events_array, std_events_array, frequencies, label="", save_pgf=False):
+	plt.figure()
+	
 	for freq_idx, frequency in enumerate(frequencies):
 		avg_events_per_angle = avg_events_array[:, freq_idx]
 		std_events_per_angle = std_events_array[:, freq_idx]
@@ -231,4 +270,14 @@ def plot_log_avg_events_vs_angle(angles, avg_events_array, std_events_array, fre
 	plt.yscale('log')
 	plt.legend()
 	plt.grid(True)
-	plt.show()
+	
+	if save_pgf:
+		file = f'log_avg_events_vs_angle{label}.pgf'
+		file = file.strip()
+		file = file.replace(' ', '_')
+		file = file.replace('.5', '05')
+		file = file.replace('at', '')
+		print(f'Saving plot to {file}')
+		plt.savefig(file)
+	else:
+		plt.show()
