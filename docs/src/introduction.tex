@@ -28,20 +28,26 @@ algorithms is possible, but is also goes against the main advantage of the event
 \section{Related Works}
 
 The unique capabilities of event-based cameras have been extensively explored in various applications and studies.
-A comprehensive survey by Gallego et al. \cite{gallego2020event} highlights the advantages of event cameras in
-applications requiring high-speed motion analysis, wide dynamic range, and low power consumption.
+A comprehensive survey by Gallego et al. highlights the advantages of event cameras in
+applications requiring high-speed motion analysis, wide dynamic range, and low power consumption. \cite{gallego2020event}
 %The survey also addresses the challenges of processing the asynchronous and sparse event data these cameras generate, 
 %emphasizing the need for novel algorithms tailored to this unconventional sensing paradigm.
 
 The potential of event cameras in vehicular \ac{VLC} has been demonstrated by Shen et al.
-\cite{shen2019vehicular}. Their study introduced a framework utilizing a \ac{DVS} to mitigate the limitations of
+Their study introduced a framework utilizing a \ac{DVS} to mitigate the limitations of
 traditional photodiode- and frame-based camera systems, such as limited throughput and vulnerability to ambient
 interference. By leveraging the event-driven nature of DVS, the proposed system achieved significant improvements
-in data transmission range and robustness.
+in data transmission range and robustness. \cite{shen2019vehicular}
 
-In addition to VLC, event-based cameras have been successfully integrated into localization systems, with promising
-results in indoor positioning. Bai et al. \cite{bai2021vlp} introduced the enhanced Camera-Assisted \ac{RSSR}
-algorithm, which combines visual data from event cameras with signal strength ratios from photodiodes.
-This algorithm achieves centimeter-level positioning accuracy while requiring minimal infrastructure,
-significantly improving the coverage and accuracy of localization systems. The RSSR approach demonstrates the
-potential for precise and efficient positioning in applications such as autonomous navigation and UAV swarming.
+% In addition to VLC, event-based cameras have been successfully integrated into localization systems,
+% yielding promising results for indoor positioning. Jung et al. introduced an indoor positioning method based on the
+% \ac{RSSR} using LEDs for location estimation. This approach leverages the relative ratio of optical power detected by
+% photodiodes from multiple LED sources, achieving precise positioning with a mean error of 3.24 cm. By incorporating
+% time-division multiplexing, the method ensures robust identification of individual LEDs, enabling efficient localization.
+% This system highlights potential applications in autonomous navigation and UAV swarming, benefiting from the method's high
+% accuracy and low additional infrastructure requirements \cite{jung2014rssr}.
+
+Event-based cameras have been integrated into localization systems with promising indoor positioning results.
+Jung et al. demonstrated an \ac{RSSR}-based method using LEDs and time-division multiplexing, achieving precise positioning
+with a mean error of 3.24 cm and minimal infrastructure requirements, suitable for applications like autonomous navigation
+and UAV swarming \cite{jung2014rssr}.

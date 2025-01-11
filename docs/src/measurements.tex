@@ -25,7 +25,7 @@ that are used on the UAVs. The camera is shown on \reffig{fig:evk4}.
 %   \label{fig:evk4}
 % \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.50\textwidth]{./fig/photos/camera_with_lens.jpg}
 	\caption{The event based camera EVK4 from Prophesee with a 2.5mm F1.6 fish eye lens.}
@@ -56,7 +56,7 @@ that encapsulate light sources, but on a more complex scene this approach become
 The other issue turned out to be the reflections of surrounding objects (as seen on \reffig{fig:meas1}), which caused
 another source of unwanted events in the recording.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.5\textwidth]{./fig/photos/meas1.png}
   \caption{Visible reflections can be seen on the wall on the left side of the image.}
@@ -83,5 +83,21 @@ with frequencies ranging from $10$ Hz to $10$ kHz.
 
 \subsection{RSSR Data collection}
 
-Another dataset will be collected for the application of \ac{RSSR} \cite{bai2021vlp},
+Another dataset was collected for the application of \ac{RSSR} \cite{jung2014rssr},
 which will serve as the focus of the subsequent bachelor thesis that builds upon this semester project.
+The data includes calibration data, that is necessary for the optical system parameter estimation. This calibration is done by
+recording a video using a calibration lattice of LEDs with known spacing, and observing the pattern distortion in the
+resulting video. This effect is best seen at the edges of the image at \reffig{fig:calibation}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{./fig/photos/calibration.png}
+	\caption{The fish eye lens distortion can be observed at the edges of the image. The calibration lattice can be seen in the center of the image.}
+	\label{fig:calibation}
+  \end{figure}
+The UAV was placed at increasing distances and various angles relative to the event camera, with the LEDs blinking at frequencies different from
+each other. This will allow for the measurement of the ratio
+%explain why to use the ratio, not the absolute value
+\footnote{Using the absolute value of the LED power is not suitable, as it also depends of the camera settings, surrounding
+environment and other factors. Finding such ratio (or property) that stays constant is crucial for correct distance estimation.}
+between the responses for each of the LEDs, which will be necessary
+for the estimation of the UAV position using RSSR.

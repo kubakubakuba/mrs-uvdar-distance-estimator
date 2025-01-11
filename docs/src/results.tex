@@ -44,7 +44,7 @@ The best fit without being too complex is the inverse square law, which can be e
 More complex functions could be used to fit the data, but it would rather tend to overfitting instead
 of representing the data in a more general way. The inverse square law approximates the data relatively well.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\subfloat[Influence of distance on the average number of events.] {
 	  \includegraphics[width=0.5\textwidth]{./fig/plots/dist.pdf}
@@ -60,7 +60,7 @@ of representing the data in a more general way. The inverse square law approxima
 	\label{fig:dist}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\subfloat[Influence of frequency on the average number of events.] {
 	  \includegraphics[width=0.5\textwidth]{./fig/plots/freqs.pdf}
@@ -76,21 +76,19 @@ of representing the data in a more general way. The inverse square law approxima
 	\label{fig:freqs}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.90\textwidth]{./fig/plots/inverse_square/square.pdf}
 	\caption{Influence of distance data fitted with polynomial and exponential function.}
 	\label{fig:fit1}
 \end{figure}
 
-\newpage
-
 \section{Rotation angle influence}
 
 From the manufacturers datasheet for the UV LEDs\footnote{The datasheet of ProLight PM2B-1LLE 1W UV Power LED can be obtained from \url{https://www.tme.eu/Document/9dfb498784ffdd07892a42f4f17c6f37/PM2B-1LLE-DTE.pdf}}
 used in the UVDAR system, we can learn that the LEDs have a lambertian radiation pattern,
 which can be seen on \reffig{fig:lambertian}.
-\begin {figure}[htbp]
+\begin {figure}[H]
 	\centering
 	\includegraphics[width=0.75\textwidth]{./fig/plots/lambertian/lambertian.pdf}
 	\caption{Lambertian radiation pattern of the UV LED.}
@@ -105,7 +103,7 @@ of the angle between the normal of the LED and the direction of the light \refeq
 \end{equation}
 If we shift those distributions by $\pm 45$ degrees and sum them together, we can see the
 theoretical distribution of the light emmited from the singular UAV arm \reffig{fig:lambert_combined}.
-\begin {figure}[htbp]
+\begin {figure}[H]
 	\centering
 	\includegraphics[width=0.75\textwidth]{./fig/plots/lambertian/3lambertian.pdf}
 	\caption{Radiation pattern of two lambertian light sources shifted by $\pm 45$ degrees.}
@@ -114,7 +112,7 @@ theoretical distribution of the light emmited from the singular UAV arm \reffig{
 With the dataset of the rotation of the UAV relative to the camera we will get the following results
 on \reffig{fig:angles}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\subfloat[Influence of rotation of the UAV on the log of average number of events at 0.5 m.] {
 	  \includegraphics[width=0.5\textwidth]{./fig/plots/angle/angle1.pdf}
@@ -138,7 +136,7 @@ but with a drop of intensity at the middle of the distribution. This could be ca
 by the fact that the LEDs, when close to the camera, can be perceived as multiple light sources,
 but when moved further away, they merge into one source as shown on \reffig{fig:leds}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\subfloat[2 LEDs with blinking frequency of 10 Hz at 0.5 m.] {
 	  \includegraphics[width=0.5\textwidth]{./fig/photos/2leds_05m.png}
@@ -155,12 +153,13 @@ but when moved further away, they merge into one source as shown on \reffig{fig:
 	\label{fig:leds}
 \end{figure}
 What we can also observe from \reffig{fig:leds} are the star-like shapes of the LEDs, which are supposed to be circular.
-Those shapes are caused by light diffraction, which is caused by the aperture blades in the lens of the camera. The number
+Those shapes are caused by light diffraction (and are named diffraction spikes), which is in turn caused by the aperture
+blades in the lens of the camera. The number
 of star spikes depend on the number of blades, the set aperture and the light source intensity then causes stars of different
 levels of profoundness.\cite{lendermann2018computational} We can observe this by comparing how profound are the star shapes on different
 frequencies, as shown on \reffig{fig:stars}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\subfloat[LED blinking at 10 Hz at 1.0 m] {
 	  \includegraphics[width=0.5\textwidth]{./fig/photos/led_10hz.png}
