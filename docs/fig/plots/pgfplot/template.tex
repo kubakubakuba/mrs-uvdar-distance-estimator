@@ -1,0 +1,16 @@
+\documentclass{standalone}
+\usepackage{pgf}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% Include the preamble from the .pgf file
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+\makeatletter
+\@ifpackageloaded{underscore}{}{\usepackage[strings]{underscore}}
+\makeatother
+
+\begin{document}
+\input{<PLOT_FILE>}
+\end{document}
