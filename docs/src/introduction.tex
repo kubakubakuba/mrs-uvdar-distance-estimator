@@ -5,16 +5,17 @@
 This semestral project is focused on measuring the influence of distance and frequency of modulated
 light source on event based camera response. Knowing the parameters of the light source, the camera with the lens
 and how the response behaves, it is possible to predict the distance of the light source from the camera. This can be
-used to improve the precision of localization algorithms, that are used in \ac{UAV} swarming applications. 
+used to improve the precision of localization algorithms, that are used in \ac{UAV} swarming applications.
+This project is available online on GitHub\footnote{Source code of this project available at \url{https://github.com/kubakubakuba/mrs-uvdar-distance-estimator}}.
 
 Event based cameras, in contrast to traditional frame based cameras, do not capture still frames but rather
-provide an asynchronous and idependent stream of intensity changes on individual pixels.
+provide an asynchronous and independent stream of intensity changes on individual pixels.
 Each pixel memorizes the last intensity value and sends an event when the intensity changes above a certain threshold.
 %\cite{gallego2020event}
 Event cameras circumvent many common issues found in traditional frame-based cameras, such as motion blur caused
 by fast-moving objects. They offer significant advantages, including a high dynamic range, low latency,
 and energy efficiency.
-This makes them perfect fot the application of agile robotics,
+This makes them perfect for the application of agile robotics,
 where the fast response time is crucial (especially in UAV swarming situations). With their sub-millisecond response time,
 event cameras can provide a significant advantage over traditional cameras in these applications.
 However, they also come with some drawbacks, such as the need for a different approach to
@@ -23,7 +24,7 @@ data processing and the higher cost of the camera units themselves. \cite{galleg
 The event data stream is represented by tuples of $(x, y, p, t)$, where $(x, y)$ are the pixel coordinates, $t$ is the time of
 intensity change and $p$ is the polarity of the change - the increase or decrease of light intensity. Images can be
 reconstructed from the event stream by integrating the events over time, doing so makes the usage of normal vision 
-algorithms is possible, but is also goes against the main advantage of the event cameras - the low latency.
+algorithms possible, but it also goes against the main advantage of the event cameras - the low latency.
 
 \section{Related Works}
 

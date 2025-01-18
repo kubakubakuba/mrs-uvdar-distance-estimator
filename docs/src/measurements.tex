@@ -32,7 +32,7 @@ that are used on the UAVs. The camera is shown on \reffig{fig:evk4}.
 	\label{fig:evk4}
 \end{figure}
 
-The data from the camera has been obtained using the Metavision Studio software, which records the data in the .raw format.
+The data from the camera has been obtained using the Metavision Studio software, which records the data in the \texttt{.raw} format.
 Data is then later processed using various functions of the Metavision SDK\footnote{Metavision SDK Docs: \url{https://docs.prophesee.ai/stable/index.html}},
 which has either C++ or Python API. In this work, the Python API has been used.
 
@@ -51,7 +51,7 @@ and the whole image has been recorded during the testing.
 
 This first experiment proved to be rather inefficient, as the LEDs need to be isolated from each other's influence, which
 was not done properly at this time. This problem is solvable in the post processing, by filtering out the events
-by using a ROI filter, but this proved rather inefficient (it is possible to filter the events by finding bounding boxes
+by using a ROI filter (it is possible to filter the events by finding bounding boxes
 that encapsulate light sources, but on a more complex scene this approach becomes relatively hard).
 The other issue turned out to be the reflections of surrounding objects (as seen on \reffig{fig:meas1}), which caused
 another source of unwanted events in the recording.
@@ -76,7 +76,7 @@ Frequency range of the LED modulation was set in a range from $10$ Hz to $30$ kH
 
 \subsection{Rotation angle influence}
 
-In addition to a distance and frequency influence, the rotation angle influence also needs to be considered, to
+In addition to distance and frequency influence, the rotation angle influence also needs to be considered, to
 verify the emitting characteristics of the light sources - if they can or cannot be considered lambertian.
 The UAV was rotated by increments of $45$ degrees relative to the event camera, at distances of $0.5$, $1$ and $2$ meters,
 with frequencies ranging from $10$ Hz to $10$ kHz. 
