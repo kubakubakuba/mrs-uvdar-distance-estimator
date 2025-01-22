@@ -14,4 +14,9 @@ uav_script.py
 *.out
 *.pdf
 
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+
 rssr_dataset/
