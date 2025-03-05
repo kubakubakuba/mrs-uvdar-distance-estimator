@@ -19,4 +19,10 @@ uav_script.py
 *.blg
 *.run.xml
 
-rssr_dataset/
+rssr_dataset/*
+!rssr_dataset/settings.toml
+!rssr_dataset/positions*.toml
+..venv
+
+ocamcalib_scripts/
+test/
