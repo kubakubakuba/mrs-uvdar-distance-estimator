@@ -1,0 +1,93 @@
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-15-49.raw"
+led1 = [ 694, 353, 7,]
+led3 = [ 646, 367, 7,]
+led4 = [ 598, 359, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-16-10.raw"
+led1 = [ 685, 363, 7,]
+led2 = [ 681, 347, 7,]
+led3 = [ 614, 366, 7,]
+led4 = [ 614, 351, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-16-29.raw"
+led1 = [ 650, 366, 7,]
+led2 = [ 698, 352, 7,]
+led3 = [ 601, 359, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-16-47.raw"
+led1 = [ 621, 366, 7,]
+led2 = [ 692, 360, 7,]
+led3 = [ 613, 352, 7,]
+led4 = [ 679, 346, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-17-05.raw"
+led1 = [ 606, 359, 7,]
+led2 = [ 661, 366, 7,]
+led4 = [ 703, 352, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-17-23.raw"
+led1 = [ 620, 350, 7,]
+led2 = [ 622, 366, 7,]
+led3 = [ 686, 346, 7,]
+led4 = [ 693, 362, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-17-39.raw"
+led2 = [ 609, 359, 7,]
+led3 = [ 704, 350, 7,]
+led4 = [ 664, 366, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-18-20.raw"
+led1 = [ 689, 346, 7,]
+led2 = [ 622, 351, 7,]
+led3 = [ 699, 360, 7,]
+led4 = [ 630, 366, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-18-49.raw"
+led1 = [ 706, 352, 7,]
+led3 = [ 660, 366, 7,]
+led4 = [ 609, 359, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-19-05.raw"
+led1 = [ 695, 359, 7,]
+led2 = [ 689, 345, 7,]
+led3 = [ 625, 365, 7,]
+led4 = [ 623, 350, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-19-34.raw"
+led1 = [ 95, 484, 7,]
+led2 = [ 89, 470, 7,]
+led3 = [ 60, 505, 7,]
+led4 = [ 55, 490, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-19-51.raw"
+led1 = [ 1091, 381, 7,]
+led2 = [ 1087, 363, 7,]
+led3 = [ 1033, 373, 7,]
+led4 = [ 1032, 357, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-20-10.raw"
+led1 = [ 679, 673, 7,]
+led2 = [ 672, 660, 7,]
+led3 = [ 607, 680, 7,]
+led4 = [ 605, 665, 7,]
+
+[[recordings]]
+filepath = "/home/jakub/mrs/git/rssr_dataset/3/recording_2025-01-10_13-20-27.raw"
+led1 = [ 675, 56, 7,]
+led2 = [ 667, 43, 7,]
+led3 = [ 601, 62, 7,]
+led4 = [ 598, 49, 7,]
+

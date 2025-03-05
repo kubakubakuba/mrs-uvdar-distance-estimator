@@ -1,0 +1,26 @@
+# this is a configuration file that specifies the settings used while recording the data for RSSR experiment
+# these settings were used in the uav_script.py
+
+[config]
+sequence_length = 16
+frequency = 250
+bias_on = 50
+bias_off = 50
+bias_hpf = 80
+camera_height = 0.87 #meters
+
+[[sequencies]]
+id = 0
+indices = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+
+[[sequencies]]
+id = 1
+indices = [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1]
+
+[[sequencies]]
+id = 2
+indices = [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]
+
+[[sequencies]]
+id = 3
+indices = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
