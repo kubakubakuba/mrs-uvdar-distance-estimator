@@ -12,8 +12,8 @@ The lens used when obtaining the data is a 2.5mm, f/1.6 fish-eye lens, with FOV 
 \end{figure}
 In this work a calibration method proposed by Scaramuzza et al. \cite{scaramuzzacalibration} is used, which is based on the pinhole camera model, and is
 used to calibrate fish eye lenses. The implementation used for the calibration is a python library py-OCamCalib \footnote{py-OCamCalib is available at \url{https://github.com/jakarto3d/py-OCamCalib}}.%TODO: maybe cite the github repo
-For calibration purposes, a calibration chessboard pattern is usually used, which offers a high contrast between squares (and thus easy detections of square corners) and
-a known square size. Multiple images are usually taken, at various rotation and distances, to obtain good calibration results.
+For calibration purposes, a calibration chessboard pattern is usually used, which offers high contrast between squares (and thus easy detections of square corners) and
+a known square size. Multiple images are usually taken, at various rotations and distances, to obtain good calibration results.
 In our calibration procedure, we use a 5x7 lattice of UV LEDs, which are spaced 50 mm apart from each other. With this pattern, events are generated at the center of the
 LEDs, and can be detected by any kind of blob detector. The LED lattice is used, so the event camera can easily detect the events from the bright LEDs, as opposed to
 the light being reflected from the chessboard pattern (which does not produce any light on its own).
@@ -44,8 +44,8 @@ reliable detection of the exact blob centers (or which events correspond to whic
   \label{fig:calibration_pattern_distorted}
 \end{figure}
 
-As we are not using a regular image of a chessboard pattern, rather a recording of accumulated events, some data preprocessing has to be done beforhand.
-Fo the purpose of this a simple Python app has been written. An event raw recording is loaded, and events are accumulated over a select period of time.
+As we are not using a regular image of a chessboard pattern, rather a recording of accumulated events, some data preprocessing has to be done beforehand.
+For the purpose of this a simple Python app has been written. An event raw recording is loaded, and events are accumulated over a select period of time.
 The accumulated events are then saved to a grayscale image, where each pixel corresponds to the number of events that occured at that
 pixel \footnote{\url{https://github.com/kubakubakuba/metavision-pyocamcalib/blob/main/generate_frames.py}}. The image is then normalized,
 and the LED centers are detected using \texttt{findContours} function from OpenCV \footnote{\url{https://github.com/kubakubakuba/metavision-pyocamcalib/blob/main/detect_blob_centers.py}}.
@@ -88,7 +88,7 @@ that is at the intersection of the optical axis from the center of the image wit
 \end{figure}
 
 Next step in the camera calibration is to fit an encompassing ellipse to the received data. The purpose of this is to see the fish eye lens distortion center, as well
-as the stretching of the image in both the x and y axis. This process can be seen in \reffig{ref:ellipse}. This ellipse is then used to calculate the point mapping functions, which allows for tranformation of points from
+as the stretching of the image in both the x and y axis. This process can be seen in \reffig{fig:ellipse}. This ellipse is then used to calculate the point mapping functions, which allows for tranformation of points from
 the image plane to their respective 3D coordinates.
 
 \begin{figure}[H]
@@ -98,7 +98,7 @@ the image plane to their respective 3D coordinates.
 	\label{fig:ellipse}
   \end{figure}
 
-The intrinsic parameters of the camera specify the image format itself (influenced by the focal length, sensor size and optical center), as there are many mapping
+The intrinsic parameters of the camera specify the image format itself (influenced by the focal length, sensor size and optical center). As there are many mapping
 functions that can be used while modelling the lens (their precision is limited by the manufacturing process), Scaramuzza et al. \cite{scaramuzzacalibration} proposed
 to fit a polynomial to find the optimal model for the lens calibration. The mapping functions are shown in \reffig{fig:mapping_functions}.
 \begin{figure}[H]
@@ -210,4 +210,22 @@ and mask out the visible area with the ellipse fitted in \reffig{fig:ellipse_fit
 	\label{fig:calibration_viz}
 \end{figure}
 
-%TODO: shopw the image before and after calibration
+We can also apply a perspective conversion to the whole image, which now represents distances and angles correctly. We can notice that by looking
+at the calibration lattice at \reffig{fig:calib_c}, which now looks like a grid of points.
+
+\begin{figure}[H]
+	\centering
+	\subfloat[Uncalibrated image.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/image_uncalib.pdf}
+	  \label{fig:calib_c_1}
+	}
+	\subfloat[Calibrated image.] {
+	  \includegraphics[width=0.5\textwidth]{./fig/pgfplot/image_calib.pdf}
+	  \label{fig:calib_c_2}
+	}
+	\caption{
+		Two photos of the calibration lattice, one uncalibrated on \reffig{fig:calib_c_1} and the one calibrated at \reffig{fig:calib_c_2}, which does not
+		exhibit any distortion.
+  }
+	\label{fig:calib_c}
+\end{figure}
