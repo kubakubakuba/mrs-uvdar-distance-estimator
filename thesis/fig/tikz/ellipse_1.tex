@@ -1,0 +1,20 @@
+\documentclass{standalone}
+\usepackage{tikz}
+
+\begin{document}
+
+% First Image: Rectangle with Circle and Unit Vectors
+\begin{tikzpicture}
+    % Draw rectangle
+    \draw[thick] (0, 0) rectangle (4, 3.5);
+    \draw[ultra thick] (0.1, 0.1) rectangle (3.9, 3.4);
+
+    % Draw circle in the middle
+    \draw[thick] (2, 1.8) circle (1.2);
+
+    % Draw unit vectors
+    \draw[->, thick, blue] (2, 1.8) -- (2, 1) node[midway, left] {$u'$}; % Down
+    \draw[->, thick, red] (2, 1.8) -- (2.8, 1.8) node[midway, above] {$v'$}; % Right
+\end{tikzpicture}
+
+\end{document}
