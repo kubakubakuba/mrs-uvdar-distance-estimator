@@ -129,15 +129,15 @@ if __name__ == "__main__":
 		for filepath, led_positions in zip(filepaths, positions):
 			led_evs = load_led_events(filepath, led_positions)
 
-			avg_1 = get_avg_events_per_period(led_evs[1], freqs[0]/2)
-			avg_2 = get_avg_events_per_period(led_evs[2], freqs[1]/2)
-			avg_3 = get_avg_events_per_period(led_evs[3], freqs[2]/2)
-			avg_4 = get_avg_events_per_period(led_evs[4], freqs[3]/2)
+			#avg_1 = get_avg_events_per_period(led_evs[1], freqs[0]/2)
+			#avg_2 = get_avg_events_per_period(led_evs[2], freqs[1]/2)
+			#avg_3 = get_avg_events_per_period(led_evs[3], freqs[2]/2)
+			#avg_4 = get_avg_events_per_period(led_evs[4], freqs[3]/2)
 
-			#avg_1 = len(led_evs[1]) if led_evs[1] is not None else 0
-			#avg_2 = len(led_evs[2]) if led_evs[2] is not None else 0
-			#avg_3 = len(led_evs[3])	if led_evs[3] is not None else 0
-			#avg_4 = len(led_evs[4]) if led_evs[4] is not None else 0
+			avg_1 = len(led_evs[1]) if led_evs[1] is not None else 0
+			avg_2 = len(led_evs[2]) if led_evs[2] is not None else 0
+			avg_3 = len(led_evs[3])	if led_evs[3] is not None else 0
+			avg_4 = len(led_evs[4]) if led_evs[4] is not None else 0
 
 			# print(f"Avg LED1 {avg_1:.2f}")
 			# print(f"Avg LED2 {avg_2:.2f}")
@@ -208,14 +208,19 @@ if __name__ == "__main__":
 
 		data.append(S_avg)
 
+	distances = [1.0, 2.0, 3.0, 5.0]
+
 	data = np.array(data)
 
 	plt.figure(figsize=(10, 6))
-	plt.plot(data, marker='o')
+	for i, label in enumerate(['LED2/LED1', 'LED1/LED3', 'LED1/LED4', 'LED2/LED3', 'LED2/LED4', 'LED4/LED3']):
+		plt.plot(distances, data[:, i], marker='o', label=label)
+
 	plt.title('Average LED Event Ratios')
-	plt.xlabel('File Index')
+	plt.xlabel('Distance (meters)')
 	plt.ylabel('Ratio')
-	plt.legend(['LED2/LED1', 'LED1/LED3', 'LED1/LED4', 'LED2/LED3', 'LED2/LED4', 'LED4/LED3'])
+	plt.xticks(distances)  # Set x-axis ticks to the distances
+	plt.legend()
 	plt.grid(True)
 	plt.show()
 

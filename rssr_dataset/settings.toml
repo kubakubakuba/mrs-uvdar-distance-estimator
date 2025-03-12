@@ -10,11 +10,11 @@ bias_hpf = 80
 camera_height = 0.87 #meters
 
 [[sequencies]]
-id = 0
+id = 4
 indices = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
 
 [[sequencies]]
-id = 1
+id = 3
 indices = [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1]
 
 [[sequencies]]
@@ -22,5 +22,5 @@ id = 2
 indices = [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]
 
 [[sequencies]]
-id = 3
+id = 1
 indices = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
