@@ -7,6 +7,7 @@ all: $(PROJNAME).pdf
 
 $(PROJNAME).pdf: $(PROJNAME).tex
 	latexmk -pdf -synctex=1 -verbose -interaction=nonstopmode -file-line-error -output-directory=$(BUILDDIR) $<
+	cp $(BUILDDIR)/$(PROJNAME).pdf .
 
 clean:
 	latexmk -output-directory=$(BUILDDIR) -c && rm -rf build/*

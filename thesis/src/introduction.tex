@@ -2,15 +2,28 @@
 
 \chapter{Introduction\label{chap:introduction}}
 
-First, introduce the reader to the research topic.
-Start with the most general view and slowly converge to the particular field, sub-field, and the challenges you face.
-You can cite others' work here \cite{baca2021mrs}.
+Event based cameras, in contrast to traditional frame based cameras, do not capture still frames but rather
+provide an asynchronous and independent stream of intensity changes on individual pixels.
+Each pixel memorizes the last intensity value and sends an event when the intensity changes above a certain threshold.
+
+Event cameras circumvent many common issues found in traditional frame-based cameras, such as motion blur caused
+by fast-moving objects. They offer significant advantages, including a high dynamic range, low latency,
+and energy efficiency.
+This makes them perfect for the application of agile robotics,
+where the fast response time is crucial (especially in UAV swarming situations). With their sub-millisecond response time,
+event cameras can provide a significant advantage over traditional cameras in these applications.
+However, they also come with some drawbacks, such as the need for a different approach to
+data processing and the higher cost of the camera units themselves. \cite{gallego22event}
+
+
+The event data stream is represented by tuples of $\begin{bmatrix} x & y & p & t \end{bmatrix}$, $\begin{bmatrix} x & y \end{bmatrix}$ are the pixel coordinates, $t$ is the time of
+intensity change and $p$ is the polarity of the change - the increase or decrease of light intensity. Images can be
+reconstructed from the event stream by integrating the events over time, doing so makes the usage of normal vision 
+algorithms possible, but it also goes against the main advantage of the event cameras - the low latency.
 
 \section{Related works}
 
 This section should contain related state-of-the-art works and their relation to the author's work.
-We usually cite the original works like this \cite{benallegue2008high}.
-You can also cite multiple papers at once like this \cite{baca2016embedded, baca2021mrs}.
 
 \section{Contributions}
 
