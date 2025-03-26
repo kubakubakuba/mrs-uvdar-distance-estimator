@@ -5,11 +5,19 @@ led3 = [ 681, 424, 10,]
 led4 = [ 525, 378, 10,]
 
 [[recordings]]
+comment = "UAV on top"
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-05-17.raw"
 led1 = [ 684, 111, 10,]
 led2 = [ 537, 110, 10,]
 led3 = [ 699, 179, 10,]
 led4 = [ 527, 179, 10,]
+# dist_x = 0
+# dist_y = -850
+# dist_z = 1212.5
+# yaw = 0
+# pitch = 0
+# roll = -34
+# camera_swivel = -30
 
 [[recordings]]
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-02-43.raw"
@@ -17,19 +25,41 @@ led1 = [ 538, 393, 10,]
 led2 = [ 713, 407, 10,]
 led3 = [ 563, 321, 10,]
 led4 = [ 706, 330, 10,]
+dist_x = 0
+dist_y = -212
+dist_z = 1425
+yaw = 0
+pitch = 0
+roll = -60
+camera_swivel = -75
 
 [[recordings]]
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-03-57.raw"
 led2 = [ 518, 352, 10,]
 led3 = [ 732, 353, 10,]
 led4 = [ 639, 412, 10,]
+dist_x = 0
+dist_y = -212
+dist_z = 1425
+yaw = 45
+pitch = 0
+roll = -60
+camera_swivel = -75
 
 [[recordings]]
+comment = "UAV on left"
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-04-29.raw"
 led1 = [ 297, 355, 10,]
 led2 = [ 187, 402, 10,]
 led3 = [ 331, 417, 10,]
 led4 = [ 201, 475, 10,]
+# dist_x = 0
+# dist_y = -212
+# dist_z = 1425
+# yaw = 0
+# pitch = 0
+# roll = -60
+# camera_swivel = -75
 
 [[recordings]]
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-04-13.raw"
@@ -37,24 +67,52 @@ led1 = [ 709, 322, 10,]
 led2 = [ 568, 316, 10,]
 led3 = [ 722, 394, 10,]
 led4 = [ 556, 386, 10,]
+dist_x = 0
+dist_y = -212
+dist_z = 1425
+yaw = 0
+pitch = 0
+roll = -60
+camera_swivel = -75
 
 [[recordings]]
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-02-28.raw"
 led1 = [ 622, 418, 10,]
 led2 = [ 745, 368, 10,]
 led3 = [ 526, 350, 10,]
+dist_x = 0
+dist_y = -212
+dist_z = 1425
+yaw = 45
+pitch = 0
+roll = -60
+camera_swivel = -75
 
 [[recordings]]
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-03-02.raw"
 led1 = [ 520, 359, 10,]
 led2 = [ 611, 417, 10,]
 led4 = [ 737, 350, 10,]
+dist_x = 0
+dist_y = -212
+dist_z = 1425
+yaw = 45
+pitch = 0
+roll = -60
+camera_swivel = -75
 
 [[recordings]]
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-03-19.raw"
 led1 = [ 532, 332, 10,]
 led2 = [ 574, 411, 10,]
 led4 = [ 736, 387, 10,]
+dist_x = 0
+dist_y = -212
+dist_z = 1425
+yaw = -25
+pitch = 0
+roll = -60
+camera_swivel = -75
 
 [[recordings]]
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-03-35.raw"
@@ -62,19 +120,41 @@ led1 = [ 555, 317, 10,]
 led2 = [ 540, 392, 10,]
 led3 = [ 696, 325, 10,]
 led4 = [ 712, 398, 10,]
+dist_x = 0
+dist_y = -212
+dist_z = 1425
+yaw = 0
+pitch = 0
+roll = -60
+camera_swivel = -75
 
 [[recordings]]
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-01-59.raw"
 led1 = [ 748, 387, 10,]
 led3 = [ 592, 418, 10,]
 led4 = [ 541, 338, 10,]
+dist_x = 0
+dist_y = -212
+dist_z = 1425
+yaw = 60
+pitch = 0
+roll = -60
+camera_swivel = -75
 
 [[recordings]]
+comment="UAV on bottom"
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-05-39.raw"
 led1 = [ 683, 552, 10,]
 led2 = [ 543, 547, 10,]
 led3 = [ 701, 620, 10,]
 led4 = [ 533, 617, 10,]
+# dist_x = 0
+# dist_y = -212
+# dist_z = 1425
+# yaw = 0
+# pitch = 0
+# roll = -60
+# camera_swivel = -75
 
 [[recordings]]
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-02-13.raw"
@@ -82,11 +162,26 @@ led1 = [ 708, 413, 10,]
 led2 = [ 719, 336, 10,]
 led3 = [ 538, 390, 10,]
 led4 = [ 576, 320, 10,]
+dist_x = 0
+dist_y = -212
+dist_z = 1425
+yaw = 10
+pitch = 0
+roll = -60
+camera_swivel = -75
 
 [[recordings]]
+comment = "UAV on right"
 filepath = "/home/jakub/mrs/git/rssr_dataset/1/recording_2025-01-10_13-04-44.raw"
 led1 = [ 1057, 508, 10,]
 led2 = [ 1066, 433, 10,]
 led3 = [ 931, 446, 10,]
 led4 = [ 957, 381, 10,]
+# dist_x = 0
+# dist_y = -212
+# dist_z = 1425
+# yaw = 0
+# pitch = 0
+# roll = -60
+# camera_swivel = -75
 
