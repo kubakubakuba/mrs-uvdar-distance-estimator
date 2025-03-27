@@ -23,6 +23,9 @@ rssr_dataset/*
 !rssr_dataset/settings.toml
 !rssr_dataset/positions*.toml
 ..venv
+old/pnp/
 
 ocamcalib_scripts/
 test/
+
+recipnps/
