@@ -414,7 +414,6 @@ class PnPlotlySolver:
 		if not all(k in recording for k in ['dist_x', 'dist_y', 'dist_z']):
 			return None
 
-		# Extract position and orientation
 		gt_position = np.array([
 			recording['dist_x'],
 			recording['dist_y'], 
@@ -423,9 +422,9 @@ class PnPlotlySolver:
 		yaw = recording.get('yaw', 0)
 		pitch = recording.get('pitch', 0)
 		roll = recording.get('roll', 0)
-		swivel = recording.get('camera_swivel', 0)
+		swivel = recording.get('camera_angle', 0)
 		
-		# Create rotation matrices
+		# create rotation matrices
 		R_pitch_roll = self._get_rotation_matrix(0, pitch, roll)
 		R_swivel = np.array([
 			[np.cos(np.radians(swivel)), -np.sin(np.radians(swivel)), 0],
@@ -438,7 +437,7 @@ class PnPlotlySolver:
 			[0, 0, 1]
 		])
 		
-		# Transform points
+		# transform points
 		swiveled_position = R_swivel @ gt_position
 		uav_center_body = np.mean(self._object_points, axis=0)
 		centered_points = self._object_points - uav_center_body
