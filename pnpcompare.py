@@ -5,7 +5,6 @@ import plotly.graph_objects as go
 from recipnps.p3p import grunert, fischler, kneip
 from pyocamcalib.modelling.camera import Camera
 import random
-import plotly.express as px
 
 class P3PComparator:
 	def __init__(self, calibration_path: str, uav_size: float = 425):
@@ -17,8 +16,6 @@ class P3PComparator:
 			[uav_size, uav_size, 0],  # LED3
 			[0, uav_size, 0]    # LED4
 		], dtype=np.float32)
-		self.w = 1280
-		self.h = 720
 
 	def load_recording(self, toml_path: str, rec_num: int = 0):
 		"""Load recording data and extract exactly 3 LED positions"""
@@ -28,8 +25,7 @@ class P3PComparator:
 		recording = data["recordings"][rec_num]
 		image_points = []
 		valid_indices = []
-		
-		# collect all available LEDs
+
 		for i in range(4):
 			led_key = f"led{i+1}"
 			if led_key in recording and len(recording[led_key]) >= 2:
@@ -39,7 +35,7 @@ class P3PComparator:
 		if len(valid_indices) < 3:
 			raise ValueError(f"Need at least 3 points (got {len(valid_indices)})")
 		
-		# If we have 4 points, randomly select 3
+		# if we have 4 points, randomly select 3
 		if len(valid_indices) == 4:
 			selected = random.sample(range(4), 3)
 			image_points = [image_points[i] for i in selected]
@@ -62,7 +58,7 @@ class P3PComparator:
 		roll = recording.get('roll', 0)
 		swivel = recording.get('camera_angle', 0)
 		
-		# create rotation matrices
+		# rotation matrices
 		R_pitch_roll = self._get_rotation_matrix(0, pitch, roll)
 		R_swivel = np.array([
 			[np.cos(np.radians(swivel)), -np.sin(np.radians(swivel)), 0],
@@ -114,6 +110,7 @@ class P3PComparator:
 		"""Solve using OpenCV's P3P implementation (returns all 4 solutions)"""
 		object_points = self._object_points[valid_indices]
 		
+		# Get normalized rays from camera model
 		rays = self.cam.cam2world(image_points.copy())
 		normalized_points = rays[:, :2] / rays[:, 2].reshape(-1, 1)
 		
@@ -146,10 +143,14 @@ class P3PComparator:
 		
 		return solutions
 
+	def is_real(self, solution):
+		return np.allclose(solution.rotation.imag, 0) and np.allclose(solution.translation.imag, 0)
+
 	def solve_recipnps_p3p(self, image_points, valid_indices, method: str):
 		"""Solve using recipnps P3P methods (returns all solutions)"""
 		object_points = self._object_points[valid_indices].T  # 3xN format
 		
+		# get and normalize rays
 		rays = self.cam.cam2world(image_points.copy())
 		image_vectors = rays.T  # 3xN format
 		image_vectors = image_vectors / np.linalg.norm(image_vectors, axis=0)
@@ -168,8 +169,13 @@ class P3PComparator:
 			
 		result = []
 		for i, sol in enumerate(solutions):
+			# if not self.is_real(sol):
+			# 	continue
+
 			t = sol.translation
 			R = sol.rotation
+			
+			# remove the solutions which are not real
 			
 			R = np.real(R)
 			t = np.real(t)
@@ -267,6 +273,7 @@ class P3PComparator:
 		
 		fig = go.Figure()
 		
+		# plot camera center
 		fig.add_trace(go.Scatter3d(
 			x=[0], y=[0], z=[0],
 			mode='markers',
@@ -275,8 +282,9 @@ class P3PComparator:
 			showlegend=True
 		))
 		
+		# plot observation rays
 		rays = self.cam.cam2world(image_points.copy())
-		ray_length = 1500
+		ray_length = 4000  # mm
 		for i, (ray, led_idx) in enumerate(zip(rays, valid_indices)):
 			scaled_ray = ray / np.linalg.norm(ray) * ray_length
 			fig.add_trace(go.Scatter3d(
@@ -288,7 +296,7 @@ class P3PComparator:
 				name=f'Ray to LED{led_idx+1}',
 				showlegend=True if i == 0 else False
 			))
-		
+
 		method_base_colors = {
 			"opencv": '#1f77b4',     # blue
 			"grunert": '#ff7f0e',    # orange
@@ -310,9 +318,10 @@ class P3PComparator:
 				
 				# create a color shade for this solution (darker for higher solution numbers)
 				base_color = method_base_colors[method.split()[0]]
-				shade_factor = 0.7 + (0.2 * sol_num)
+				shade_factor = 0.7 + (0.2 * sol_num)  # 0.7-0.9 range for shades
 				shaded_color = self._adjust_color_shade(base_color, shade_factor)
 				
+				# plot all points for this solution as one trace
 				fig.add_trace(go.Scatter3d(
 					x=transformed_points[:, 0],
 					y=transformed_points[:, 1],
@@ -329,7 +338,7 @@ class P3PComparator:
 					showlegend=True
 				))
 				
-				connections = [[0,1,2,0]]
+				connections = [[0,1,2,0]]  # closed triangle
 				for conn in connections:
 					fig.add_trace(go.Scatter3d(
 						x=transformed_points[conn, 0],
@@ -346,6 +355,7 @@ class P3PComparator:
 					))
 		
 		if gt_points is not None:
+			# plot ground truth points
 			for i in range(4):
 				if i == 0:
 					fig.add_trace(go.Scatter3d(
@@ -366,6 +376,7 @@ class P3PComparator:
 						showlegend=False
 					))
 			
+			# plot ground truth connections
 			gt_connections = [[0,1], [1,3], [3,2], [2,0], [0,3], [1,2]]
 			for conn in gt_connections:
 				fig.add_trace(go.Scatter3d(
@@ -377,6 +388,7 @@ class P3PComparator:
 					showlegend=False
 				))
 		
+		# set layout
 		max_range = 2000 * 1.5
 		title = f"P3P Methods Comparison - Recording {rec_num}<br>LEDs: {[i+1 for i in valid_indices]}"
 		
@@ -395,7 +407,7 @@ class P3PComparator:
 				camera=dict(eye=dict(x=1.5, y=1.5, z=0.8))
 			),
 			legend=dict(
-				title='Solutions',
+				title='Solutions (click to toggle)',
 				x=1.05,
 				y=0.5,
 				itemsizing='constant'
@@ -419,8 +431,10 @@ class P3PComparator:
 		return f'rgb{shaded}'
 
 if __name__ == "__main__":
+	import plotly.express as px
+	
 	comparator = P3PComparator("calibration.json", uav_size=425)
 	toml_file = "rssr_dataset/positions1.toml"
 	
 	fig = comparator.plot_p3p_comparison(toml_file, rec_num=0, save_html=True, html_filename="p3p_comparison.html")
-	#fig.show()
+	# fig.show()
