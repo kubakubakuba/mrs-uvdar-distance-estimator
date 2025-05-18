@@ -1,0 +1,117 @@
+{
+	"recordings": [
+	  {
+		"filepath": "/home/jakub/mrs/git/rssr_dataset/5/recording_2025-01-10_13-23-09.raw",
+		"led1": [652, 383, 5],
+		"led2": [658, 377, 5],
+		"led3": [611, 385, 5],
+		"led4": [617, 379, 5],
+		"dist_x": -212.5,
+		"dist_y": 0,
+		"dist_z": 5212.5,
+		"yaw": 0,
+		"pitch": 0,
+		"roll": -81
+	  },
+	  {
+		"filepath": "/home/jakub/mrs/git/rssr_dataset/5/recording_2025-01-10_13-24-40.raw",
+		"led1": [677, 406, 5],
+		"led2": [682, 400, 5],
+		"led3": [635, 408, 5],
+		"led4": [641, 403, 5],
+		"dist_x": -212.5,
+		"dist_y": 0,
+		"dist_z": 5212.5,
+		"yaw": 0,
+		"pitch": 0,
+		"roll": -81
+	  },
+	  {
+		"filepath": "/home/jakub/mrs/git/rssr_dataset/5/recording_2025-01-10_13-25-00.raw",
+		"led1": [660, 408, 5],
+		"led2": [688, 402, 5],
+		"led3": [629, 406, 5],
+		"dist_x": -212.5,
+		"dist_y": 0,
+		"dist_z": 5212.5,
+		"yaw": 45,
+		"pitch": 0,
+		"roll": -81
+	  },
+	  {
+		"filepath": "/home/jakub/mrs/git/rssr_dataset/5/recording_2025-01-10_13-25-18.raw",
+		"led1": [641, 410, 5],
+		"led2": [682, 405, 5],
+		"led3": [634, 404, 5],
+		"led4": [675, 401, 5],
+		"dist_x": -212.5,
+		"dist_y": 0,
+		"dist_z": 5212.5,
+		"yaw": 0,
+		"pitch": 0,
+		"roll": -81
+	  },
+	  {
+		"filepath": "/home/jakub/mrs/git/rssr_dataset/5/recording_2025-01-10_13-25-35.raw",
+		"led1": [627, 406, 5],
+		"led2": [660, 408, 5],
+		"led4": [686, 402, 5],
+		"dist_x": -212.5,
+		"dist_y": 0,
+		"dist_z": 5212.5,
+		"yaw": 45,
+		"pitch": 0,
+		"roll": -81
+	  },
+	  {
+		"filepath": "/home/jakub/mrs/git/rssr_dataset/5/recording_2025-01-10_13-25-51.raw",
+		"led1": [633, 403, 5],
+		"led2": [641, 410, 5],
+		"led3": [674, 400, 5],
+		"led4": [681, 405, 5],
+		"dist_x": -212.5,
+		"dist_y": 0,
+		"dist_z": 5212.5,
+		"yaw": 0,
+		"pitch": 0,
+		"roll": -81
+	  },
+	  {
+		"filepath": "/home/jakub/mrs/git/rssr_dataset/5/recording_2025-01-10_13-26-09.raw",
+		"led2": [629, 406, 5],
+		"led3": [688, 402, 5],
+		"led4": [662, 409, 5],
+		"dist_x": -212.5,
+		"dist_y": 0,
+		"dist_z": 5212.5,
+		"yaw": 45,
+		"pitch": 0,
+		"roll": -81
+	  },
+	  {
+		"filepath": "/home/jakub/mrs/git/rssr_dataset/5/recording_2025-01-10_13-26-26.raw",
+		"led1": [678, 400, 5],
+		"led2": [636, 403, 5],
+		"led3": [682, 405, 5],
+		"led4": [641, 409, 5],
+		"dist_x": -212.5,
+		"dist_y": 0,
+		"dist_z": 5212.5,
+		"yaw": 0,
+		"pitch": 0,
+		"roll": -81
+	  },
+	  {
+		"filepath": "/home/jakub/mrs/git/rssr_dataset/5/recording_2025-01-10_13-26-43.raw",
+		"led1": [689, 402, 5],
+		"led3": [662, 408, 5],
+		"led4": [631, 406, 5],
+		"dist_x": -212.5,
+		"dist_y": 0,
+		"dist_z": 5212.5,
+		"yaw": 45,
+		"pitch": 0,
+		"roll": -81
+	  }
+	]
+  }

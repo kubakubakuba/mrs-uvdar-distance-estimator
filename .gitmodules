@@ -1,0 +1,3 @@
+[submodule "pyrecipnps"]
+	path = pyrecipnps
+	url = https://github.com/vrbadev/py-recipnps.git

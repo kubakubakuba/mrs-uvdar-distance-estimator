@@ -19,9 +19,9 @@ uav_script.py
 *.blg
 *.run.xml
 
-rssr_dataset/*
-!rssr_dataset/settings.toml
-!rssr_dataset/positions*.toml
+pnp_dataset/*
+!pnp_dataset/settings.toml
+!pnp_dataset/positions*.toml
 ..venv
 old/pnp/
 
@@ -29,3 +29,4 @@ ocamcalib_scripts/
 test/
 
 recipnps/
+camp/*
