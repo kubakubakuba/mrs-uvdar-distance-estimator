@@ -521,8 +521,8 @@ class PnPsolver:
 
 if __name__ == "__main__":
 	solver = PnPsolver("calibration.json", uav_size=425)
-	dataset_dir = "rssr_dataset"
-	toml_file = "positions1.toml"
+	dataset_dir = "pnp_dataset"
+	toml_file = "positions3.toml"
 
 	path = os.path.join(dataset_dir, toml_file)
 	with open(path, "r") as f:

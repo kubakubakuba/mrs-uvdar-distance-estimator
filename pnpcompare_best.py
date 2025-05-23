@@ -427,7 +427,7 @@ class P3PComparatorOptimized:
 
 if __name__ == "__main__":
 	comparator = P3PComparatorOptimized("calibration.json", uav_size=425)
-	toml_file = "rssr_dataset/positions1.toml"
+	toml_file = "pnp_dataset/positions1.toml"
 	
 	fig = comparator.plot_p3p_comparison(toml_file, rec_num=2, save_html=True, html_filename="p3p_comparison_optimized.html")
 	# fig.show()
